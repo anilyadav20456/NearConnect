@@ -1313,3 +1313,163 @@
   }
 
 }
+
+/* =========================================================
+   NEARCONNECT — MOBILE LOGIN
+   ========================================================= */
+
+@media (max-width: 767px) {
+
+  .login-page {
+    width: 100% !important;
+    min-height: 100dvh !important;
+    overflow-x: hidden !important;
+  }
+
+  .login-navbar {
+    width: 100% !important;
+    padding: 12px 14px !important;
+  }
+
+  .login-brand-name {
+    font-size: 17px !important;
+  }
+
+  .login-nav-right {
+    gap: 6px !important;
+    font-size: 11px !important;
+  }
+
+  .login-main {
+    width: 100% !important;
+    padding: 12px !important;
+  }
+
+  .login-card {
+    width: 100% !important;
+    max-width: 100% !important;
+
+    display: block !important;
+
+    border-radius: 22px !important;
+    overflow: hidden !important;
+  }
+
+  /* LEFT */
+  .login-intro {
+    width: 100% !important;
+    padding: 28px 20px !important;
+  }
+
+  .login-intro h1 {
+    font-size: 40px !important;
+    line-height: 0.98 !important;
+    letter-spacing: -2px !important;
+  }
+
+  .login-description {
+    font-size: 13px !important;
+    line-height: 1.55 !important;
+    max-width: 100% !important;
+  }
+
+  .login-visual {
+    width: 100% !important;
+    height: 180px !important;
+    margin-top: 18px !important;
+  }
+
+  /* RIGHT */
+  .login-form-section {
+    width: 100% !important;
+    padding: 26px 18px !important;
+  }
+
+  .login-form-header h2 {
+    font-size: 25px !important;
+    line-height: 1.12 !important;
+  }
+
+  .login-form-header p {
+    font-size: 12px !important;
+    line-height: 1.5 !important;
+  }
+
+  .login-form {
+    width: 100% !important;
+  }
+
+  .login-field {
+    width: 100% !important;
+  }
+
+  .login-input-wrapper {
+    width: 100% !important;
+  }
+
+  .login-input-wrapper input {
+    width: 100% !important;
+    min-width: 0 !important;
+    font-size: 14px !important;
+  }
+
+  .login-submit {
+    width: 100% !important;
+    min-height: 49px !important;
+  }
+
+  .login-message {
+    width: 100% !important;
+    font-size: 12px !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  .login-register {
+    width: 100% !important;
+    text-align: center !important;
+    flex-wrap: wrap !important;
+    gap: 5px !important;
+  }
+
+  .login-privacy {
+    width: 100% !important;
+  }
+
+  .login-copyright {
+    text-align: center !important;
+    font-size: 10px !important;
+    padding: 12px !important;
+  }
+}
+
+
+/* =========================================================
+   SMALL PHONES
+   ========================================================= */
+
+@media (max-width: 390px) {
+
+  .login-main {
+    padding: 8px !important;
+  }
+
+  .login-intro {
+    padding: 22px 16px !important;
+  }
+
+  .login-form-section {
+    padding: 22px 14px !important;
+  }
+
+  .login-intro h1 {
+    font-size: 34px !important;
+  }
+
+  .login-form-header h2 {
+    font-size: 22px !important;
+  }
+
+  .login-visual {
+    height: 150px !important;
+  }
+}
