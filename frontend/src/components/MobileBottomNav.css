@@ -1,0 +1,80 @@
+.mobile-bottom-nav {
+  display: none;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 768px) {
+
+  .mobile-bottom-nav {
+    position: fixed;
+
+    left: 0;
+    bottom: 0;
+
+    width: 100%;
+    height: 68px;
+
+    background: rgba(255, 255, 255, 0.97);
+
+    border-top: 1px solid #e5e7eb;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+
+    z-index: 999;
+
+    padding: 6px 8px;
+
+    box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.06);
+  }
+
+
+  .mobile-nav-item {
+    border: none;
+
+    background: transparent;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 3px;
+
+    min-width: 58px;
+
+    color: #6b7280;
+
+    cursor: pointer;
+  }
+
+
+  .mobile-nav-item span {
+    font-size: 20px;
+
+    line-height: 1;
+  }
+
+
+  .mobile-nav-item small {
+    font-size: 11px;
+
+    font-weight: 500;
+  }
+
+
+  .mobile-nav-item.active {
+    color: #5146e5;
+  }
+
+
+  .mobile-nav-item.active small {
+    font-weight: 700;
+  }
+
+}

@@ -1,13 +1,128 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+
+/* =========================================
+   NEARCONNECT GLOBAL DESIGN SYSTEM
+========================================= */
+
+:root {
+  --primary: #c8f24a;
+  --primary-dark: #afd83b;
+  --primary-soft: rgba(200, 242, 74, 0.18);
+
+  --ink: #11130f;
+  --ink-soft: #252920;
+
+  --background: #f5f6f1;
+  --surface: #ffffff;
+
+  --text: #252920;
+  --muted: #697064;
+  --muted-light: #92988c;
+
+  --border: #dce1d7;
+
+  --danger: #b84236;
+  --success: #63851a;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+
+  --shadow-sm:
+    0 4px 16px rgba(17, 19, 15, 0.05);
+
+  --shadow-md:
+    0 12px 35px rgba(17, 19, 15, 0.08);
+}
+
+
+/* =========================================
+   RESET
+========================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  margin: 0;
+  padding: 0;
+
+  font-size: 16px;
+
+  scroll-behavior: smooth;
+}
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  padding: 0;
+
+  background: var(--background);
+
+  color: var(--text);
+
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
     sans-serif;
+
   -webkit-font-smoothing: antialiased;
+
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+button,
+input,
+textarea,
+select {
+  font-family: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+
+/* =========================================
+   SELECTION
+========================================= */
+
+::selection {
+  background: var(--primary);
+
+  color: var(--ink);
+}
+
+
+/* =========================================
+   SCROLLBAR
+========================================= */
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c8cdc1;
+
+  border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #aeb5a7;
 }

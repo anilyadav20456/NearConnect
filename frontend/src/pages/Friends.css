@@ -1,0 +1,2131 @@
+/* =========================================================
+   NEARCONNECT
+   FRIENDS — PROFESSIONAL LAUNCH UI
+   ========================================================= */
+
+.friends-page {
+  min-height: 100vh;
+
+  background:
+    linear-gradient(
+      180deg,
+      #f8fbff 0%,
+      #f5f7fb 48%,
+      #f4f6fa 100%
+    );
+
+  color: #111827;
+
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+
+/* =========================================================
+   TOPBAR
+   ========================================================= */
+
+.friends-topbar {
+  width: min(1240px, 94%);
+  min-height: 76px;
+
+  margin: 0 auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 18px;
+
+  border-bottom: 1px solid #e5e7eb;
+}
+
+
+.friends-brand {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  cursor: pointer;
+
+  user-select: none;
+}
+
+
+.friends-brand-mark {
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 12px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #1877f2,
+      #4d9bff
+    );
+
+  color: #ffffff;
+
+  font-size: 18px;
+  font-weight: 900;
+
+  box-shadow:
+    0 8px 22px
+    rgba(24, 119, 242, 0.15);
+}
+
+
+.friends-brand > span {
+  color: #111827;
+
+  font-size: 18px;
+  font-weight: 850;
+
+  letter-spacing: -0.5px;
+}
+
+
+.friends-top-actions {
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+}
+
+
+.friends-nav-button {
+  height: 38px;
+
+  padding:
+    0 12px;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 9px;
+
+  background: #ffffff;
+
+  color: #374151;
+
+  font-family: inherit;
+
+  font-size: 9px;
+  font-weight: 800;
+
+  cursor: pointer;
+
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease,
+    transform 0.18s ease;
+}
+
+
+.friends-nav-button:hover {
+  background: #eaf3ff;
+
+  border-color: #bfdbfe;
+
+  color: #1877f2;
+
+  transform:
+    translateY(-1px);
+}
+
+
+/* =========================================================
+   MAIN
+   ========================================================= */
+
+.friends-main {
+  width: min(1120px, 92%);
+
+  margin: 0 auto;
+
+  padding:
+    34px
+    0
+    65px;
+}
+
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.friends-hero {
+  min-height: 185px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 24px;
+
+  padding:
+    28px
+    32px;
+
+  border:
+    1px solid
+    #dbe7f6;
+
+  border-radius: 20px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #ffffff 0%,
+      #f4f8ff 100%
+    );
+
+  box-shadow:
+    0 10px 32px
+    rgba(24, 119, 242, 0.045);
+}
+
+
+.friends-label {
+  display: block;
+
+  margin-bottom: 8px;
+
+  color: #1877f2;
+
+  font-size: 8px;
+  font-weight: 900;
+
+  letter-spacing: 1.6px;
+}
+
+
+.friends-hero h1 {
+  margin: 0;
+
+  color: #111827;
+
+  font-size: 31px;
+  line-height: 1.1;
+
+  letter-spacing: -1.3px;
+
+  font-weight: 880;
+}
+
+
+.friends-hero p {
+  max-width: 530px;
+
+  margin: 9px 0 0;
+
+  color: #6b7280;
+
+  font-size: 10px;
+  line-height: 1.6;
+}
+
+
+.friends-hero-icon {
+  width: 80px;
+  height: 80px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 22px;
+
+  background: #eaf3ff;
+
+  font-size: 31px;
+}
+
+
+/* =========================================================
+   ALERTS
+   ========================================================= */
+
+.friends-success,
+.friends-error {
+  margin-top: 16px;
+
+  min-height: 44px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  padding:
+    0 14px;
+
+  border-radius: 10px;
+
+  font-size: 9px;
+  font-weight: 750;
+}
+
+
+.friends-success {
+  border:
+    1px solid
+    #bbf7d0;
+
+  background:
+    #f0fdf4;
+
+  color:
+    #166534;
+}
+
+
+.friends-error {
+  border:
+    1px solid
+    #fecaca;
+
+  background:
+    #fff7f7;
+
+  color:
+    #991b1b;
+}
+
+
+/* =========================================================
+   TABS
+   ========================================================= */
+
+.friends-tabs {
+  margin-top: 22px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 6px;
+
+  padding: 5px;
+
+  width: fit-content;
+
+  border:
+    1px solid
+    #e5e7eb;
+
+  border-radius: 11px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 4px 15px
+    rgba(15, 23, 42, 0.03);
+}
+
+
+.friends-tabs button {
+  min-height: 34px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+
+  padding:
+    0 13px;
+
+  border: 0;
+
+  border-radius: 8px;
+
+  background: transparent;
+
+  color: #6b7280;
+
+  font-family: inherit;
+
+  font-size: 8px;
+  font-weight: 800;
+
+  cursor: pointer;
+
+  transition: 0.18s ease;
+}
+
+
+.friends-tabs button:hover {
+  background: #f4f7fb;
+
+  color: #374151;
+}
+
+
+.friends-tabs button.active {
+  background: #1877f2;
+
+  color: #ffffff;
+
+  box-shadow:
+    0 4px 12px
+    rgba(24, 119, 242, 0.16);
+}
+
+
+.friends-tabs button.danger-tab.active {
+  background: #ef4444;
+
+  box-shadow:
+    0 4px 12px
+    rgba(239, 68, 68, 0.16);
+}
+
+
+.friends-tabs b {
+  min-width: 17px;
+  height: 17px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding:
+    0 4px;
+
+  border-radius: 999px;
+
+  background: #eef2f7;
+
+  color: #6b7280;
+
+  font-size: 7px;
+}
+
+
+.friends-tabs button.active b {
+  background:
+    rgba(255, 255, 255, 0.2);
+
+  color: #ffffff;
+}
+
+
+.friends-tabs .request-count {
+  background: #ef4444;
+  color: #ffffff;
+}
+
+
+/* =========================================================
+   SECTION
+   ========================================================= */
+
+.friends-section {
+  margin-top: 20px;
+}
+
+
+/* =========================================================
+   TOOLBAR
+   ========================================================= */
+
+.friends-toolbar {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    170px;
+
+  gap: 10px;
+
+  align-items: center;
+}
+
+
+.friends-search {
+  height: 47px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  padding:
+    0 13px;
+
+  border:
+    1px solid
+    #e2e7ee;
+
+  border-radius: 11px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 4px 16px
+    rgba(15, 23, 42, 0.025);
+
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+
+.friends-search:focus-within {
+  border-color:
+    #93c5fd;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(24, 119, 242, 0.08);
+}
+
+
+.friends-search > span {
+  font-size: 13px;
+}
+
+
+.friends-search input {
+  width: 100%;
+
+  border: 0;
+  outline: 0;
+
+  background: transparent;
+
+  color: #111827;
+
+  font-family: inherit;
+
+  font-size: 9px;
+}
+
+
+.friends-search input::placeholder {
+  color: #a1aab8;
+}
+
+
+.friends-sort {
+  height: 47px;
+
+  width: 100%;
+
+  padding:
+    0 11px;
+
+  border:
+    1px solid
+    #e2e7ee;
+
+  border-radius: 11px;
+
+  background: #ffffff;
+
+  color: #374151;
+
+  font-family: inherit;
+
+  font-size: 8px;
+  font-weight: 750;
+
+  outline: none;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 4px 16px
+    rgba(15, 23, 42, 0.025);
+}
+
+
+.friends-sort:focus {
+  border-color:
+    #93c5fd;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(24, 119, 242, 0.08);
+}
+
+
+/* =========================================================
+   SECTION HEADING
+   ========================================================= */
+
+.friends-section-heading {
+  margin:
+    22px
+    0
+    13px;
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+
+.friends-section-heading span {
+  display: block;
+
+  margin-bottom: 4px;
+
+  color: #1877f2;
+
+  font-size: 7px;
+  font-weight: 900;
+
+  letter-spacing: 1.4px;
+}
+
+
+.friends-section-heading h2 {
+  margin: 0;
+
+  color: #111827;
+
+  font-size: 20px;
+  font-weight: 850;
+
+  letter-spacing: -0.6px;
+}
+
+
+/* =========================================================
+   FRIEND GRID
+   ========================================================= */
+
+.friends-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 13px;
+}
+
+
+/* =========================================================
+   FRIEND CARD
+   ========================================================= */
+
+.friend-card {
+  min-width: 0;
+
+  padding:
+    17px;
+
+  border:
+    1px solid
+    #e5e7eb;
+
+  border-radius: 14px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 6px 22px
+    rgba(15, 23, 42, 0.035);
+
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+
+.friend-card:hover {
+  transform:
+    translateY(-3px);
+
+  border-color:
+    #d1e2f8;
+
+  box-shadow:
+    0 12px 30px
+    rgba(15, 23, 42, 0.065);
+}
+
+
+.friend-card-top {
+  display: flex;
+
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 10px;
+}
+
+
+.friend-avatar-wrap {
+  position: relative;
+}
+
+
+.friend-avatar {
+  width: 51px;
+  height: 51px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background:
+    linear-gradient(
+      135deg,
+      #eaf3ff,
+      #dbeafe
+    );
+
+  color: #1877f2;
+
+  font-size: 18px;
+  font-weight: 900;
+}
+
+
+.friend-online-dot {
+  position: absolute;
+
+  right: 0;
+  bottom: 1px;
+
+  width: 12px;
+  height: 12px;
+
+  border:
+    2px solid
+    #ffffff;
+
+  border-radius: 50%;
+
+  background: #22c55e;
+}
+
+
+.friend-online-label,
+.friend-offline-label {
+  height: 22px;
+
+  display: inline-flex;
+  align-items: center;
+
+  padding:
+    0 8px;
+
+  border-radius: 999px;
+
+  font-size: 7px;
+  font-weight: 850;
+}
+
+
+.friend-online-label {
+  background: #ecfdf3;
+
+  color: #15803d;
+}
+
+
+.friend-offline-label {
+  background: #f3f4f6;
+
+  color: #6b7280;
+}
+
+
+.friend-card h3 {
+  margin:
+    13px 0
+    3px;
+
+  color: #111827;
+
+  font-size: 13px;
+  font-weight: 850;
+
+  letter-spacing: -0.25px;
+}
+
+
+.friend-username {
+  display: block;
+
+  color: #9ca3af;
+
+  font-size: 8px;
+}
+
+
+.friend-profession {
+  margin:
+    11px
+    0
+    0;
+
+  color: #4b5563;
+
+  font-size: 8px;
+  font-weight: 700;
+}
+
+
+.friend-bio {
+  margin:
+    8px
+    0
+    0;
+
+  color: #6b7280;
+
+  font-size: 8px;
+
+  line-height: 1.45;
+
+  display: -webkit-box;
+
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+
+  overflow: hidden;
+}
+
+
+/* =========================================================
+   INTERESTS
+   ========================================================= */
+
+.friend-interests {
+  margin-top: 10px;
+
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 5px;
+}
+
+
+.friend-interests span {
+  max-width: 100%;
+
+  padding:
+    5px
+    7px;
+
+  overflow: hidden;
+
+  border-radius: 999px;
+
+  background: #f4f7fb;
+
+  color: #4b5563;
+
+  font-size: 6px;
+  font-weight: 700;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+
+/* =========================================================
+   ACTIONS
+   ========================================================= */
+
+.friend-actions {
+  margin-top: 15px;
+
+  display: grid;
+
+  grid-template-columns:
+    1fr
+    38px;
+
+  gap: 6px;
+}
+
+
+.friend-message-button,
+.friend-more-button {
+  height: 35px;
+
+  border-radius: 8px;
+
+  font-family: inherit;
+
+  cursor: pointer;
+
+  transition: 0.18s ease;
+}
+
+
+.friend-message-button {
+  border: 1px solid #bfdbfe;
+
+  background: #eaf3ff;
+
+  color: #1877f2;
+
+  font-size: 8px;
+  font-weight: 800;
+}
+
+
+.friend-message-button:hover {
+  background: #dbeafe;
+
+  border-color: #93c5fd;
+}
+
+
+.friend-more-button {
+  border: 1px solid #e5e7eb;
+
+  background: #ffffff;
+
+  color: #6b7280;
+
+  font-size: 15px;
+  font-weight: 800;
+}
+
+
+.friend-more-button:hover {
+  background: #f5f7fb;
+
+  color: #374151;
+}
+
+
+/* =========================================================
+   REQUESTS
+   ========================================================= */
+
+.request-list {
+  display: flex;
+  flex-direction: column;
+
+  gap: 9px;
+}
+
+
+.request-card {
+  min-height: 76px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  padding:
+    12px
+    14px;
+
+  border:
+    1px solid
+    #e5e7eb;
+
+  border-radius: 13px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 4px 18px
+    rgba(15, 23, 42, 0.03);
+}
+
+
+.request-avatar {
+  width: 45px;
+  height: 45px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background:
+    #eaf3ff;
+
+  color: #1877f2;
+
+  font-size: 16px;
+  font-weight: 900;
+}
+
+
+.request-info {
+  flex: 1;
+  min-width: 0;
+}
+
+
+.request-info h3 {
+  margin: 0;
+
+  font-size: 10px;
+  font-weight: 850;
+}
+
+
+.request-info span {
+  display: block;
+
+  margin-top: 2px;
+
+  color: #9ca3af;
+
+  font-size: 7px;
+}
+
+
+.request-info p {
+  margin: 5px 0 0;
+
+  color: #6b7280;
+
+  font-size: 7px;
+}
+
+
+.request-actions {
+  display: flex;
+
+  gap: 6px;
+}
+
+
+.accept-request-button,
+.reject-request-button {
+  height: 33px;
+
+  padding:
+    0 10px;
+
+  border-radius: 8px;
+
+  font-family: inherit;
+
+  font-size: 7px;
+  font-weight: 800;
+
+  cursor: pointer;
+}
+
+
+.accept-request-button {
+  border: 1px solid #86efac;
+
+  background: #ecfdf3;
+
+  color: #15803d;
+}
+
+
+.accept-request-button:hover {
+  background: #dcfce7;
+}
+
+
+.reject-request-button {
+  border: 1px solid #e5e7eb;
+
+  background: #ffffff;
+
+  color: #6b7280;
+}
+
+
+.reject-request-button:hover {
+  background: #f9fafb;
+
+  color: #374151;
+}
+
+
+/* =========================================================
+   BLOCKED INFO
+   ========================================================= */
+
+.blocked-info {
+  margin-bottom: 13px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  padding:
+    11px
+    12px;
+
+  border:
+    1px solid
+    #fecdd3;
+
+  border-radius: 10px;
+
+  background:
+    #fff7f8;
+}
+
+
+.blocked-info > span {
+  font-size: 15px;
+}
+
+
+.blocked-info p {
+  margin: 0;
+
+  color: #6b7280;
+
+  font-size: 8px;
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   BLOCKED LIST
+   ========================================================= */
+
+.blocked-list {
+  display: flex;
+  flex-direction: column;
+
+  gap: 8px;
+}
+
+
+.blocked-card {
+  min-height: 68px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 11px;
+
+  padding:
+    10px
+    12px;
+
+  border:
+    1px solid
+    #e5e7eb;
+
+  border-radius: 11px;
+
+  background: #ffffff;
+}
+
+
+.blocked-avatar {
+  width: 40px;
+  height: 40px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background:
+    #fff1f2;
+
+  color:
+    #dc2626;
+
+  font-size: 14px;
+  font-weight: 900;
+}
+
+
+.blocked-info-content {
+  flex: 1;
+
+  min-width: 0;
+}
+
+
+.blocked-info-content h3 {
+  margin: 0;
+
+  font-size: 9px;
+  font-weight: 850;
+}
+
+
+.blocked-info-content span {
+  display: block;
+
+  margin-top: 3px;
+
+  color: #9ca3af;
+
+  font-size: 7px;
+}
+
+
+.unblock-button {
+  height: 32px;
+
+  padding:
+    0 10px;
+
+  border:
+    1px solid
+    #bfdbfe;
+
+  border-radius: 8px;
+
+  background:
+    #eaf3ff;
+
+  color:
+    #1877f2;
+
+  font-family: inherit;
+
+  font-size: 7px;
+  font-weight: 800;
+
+  cursor: pointer;
+
+  transition: 0.18s ease;
+}
+
+
+.unblock-button:hover {
+  background:
+    #dbeafe;
+
+  border-color:
+    #93c5fd;
+}
+
+
+/* =========================================================
+   EMPTY
+   ========================================================= */
+
+.friends-empty {
+  min-height: 270px;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  padding:
+    30px;
+
+  border:
+    1px solid
+    #e5e7eb;
+
+  border-radius: 14px;
+
+  background: #ffffff;
+
+  text-align: center;
+
+  box-shadow:
+    0 5px 20px
+    rgba(15, 23, 42, 0.03);
+}
+
+
+.friends-empty > div {
+  width: 58px;
+  height: 58px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 11px;
+
+  border-radius: 50%;
+
+  background:
+    #eaf3ff;
+
+  font-size: 23px;
+}
+
+
+.friends-empty h3 {
+  margin: 0;
+
+  font-size: 13px;
+  font-weight: 830;
+}
+
+
+.friends-empty p {
+  max-width: 380px;
+
+  margin:
+    7px
+    0
+    15px;
+
+  color:
+    #6b7280;
+
+  font-size: 8px;
+  line-height: 1.5;
+}
+
+
+.friends-empty button {
+  height: 36px;
+
+  padding:
+    0 13px;
+
+  border: 0;
+
+  border-radius: 8px;
+
+  background:
+    #1877f2;
+
+  color: #ffffff;
+
+  font-family: inherit;
+
+  font-size: 8px;
+  font-weight: 800;
+
+  cursor: pointer;
+}
+
+
+.friends-empty button:hover {
+  background:
+    #0d65d9;
+}
+
+
+/* =========================================================
+   REPORT MODAL
+   ========================================================= */
+
+.report-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 1000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  background:
+    rgba(
+      15,
+      23,
+      42,
+      0.52
+    );
+
+  backdrop-filter:
+    blur(4px);
+}
+
+
+.report-modal {
+  width: min(490px, 100%);
+
+  max-height: 90vh;
+
+  overflow-y: auto;
+
+  padding:
+    20px;
+
+  border:
+    1px solid
+    #e5e7eb;
+
+  border-radius: 16px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 25px 70px
+    rgba(15, 23, 42, 0.22);
+}
+
+
+.report-modal-header {
+  display: flex;
+  justify-content: space-between;
+
+  gap: 12px;
+}
+
+
+.report-modal-header span {
+  display: block;
+
+  margin-bottom: 4px;
+
+  color: #dc2626;
+
+  font-size: 7px;
+  font-weight: 900;
+
+  letter-spacing: 1.3px;
+}
+
+
+.report-modal-header h2 {
+  margin: 0;
+
+  font-size: 17px;
+  font-weight: 850;
+}
+
+
+.report-close {
+  width: 32px;
+  height: 32px;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 8px;
+
+  background: #fff;
+
+  color: #6b7280;
+
+  font-size: 19px;
+
+  cursor: pointer;
+}
+
+
+.report-subtitle {
+  margin:
+    10px
+    0
+    17px;
+
+  color: #6b7280;
+
+  font-size: 8px;
+  line-height: 1.5;
+}
+
+
+.report-label {
+  display: block;
+
+  margin:
+    0
+    0
+    6px;
+
+  color: #374151;
+
+  font-size: 8px;
+  font-weight: 800;
+}
+
+
+.report-select,
+.report-textarea {
+  width: 100%;
+
+  margin-bottom: 14px;
+
+  border:
+    1px solid
+    #dfe3e8;
+
+  border-radius: 9px;
+
+  background: #fff;
+
+  color: #111827;
+
+  font-family: inherit;
+
+  outline: none;
+}
+
+
+.report-select {
+  height: 40px;
+
+  padding:
+    0
+    10px;
+
+  font-size: 8px;
+}
+
+
+.report-textarea {
+  min-height: 105px;
+
+  padding:
+    10px;
+
+  font-size: 8px;
+
+  line-height: 1.5;
+
+  resize:
+    vertical;
+}
+
+
+.report-select:focus,
+.report-textarea:focus {
+  border-color:
+    #93c5fd;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(
+      24,
+      119,
+      242,
+      0.08
+    );
+}
+
+
+.report-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+
+  gap: 7px;
+}
+
+
+.report-cancel,
+.report-submit {
+  height: 36px;
+
+  padding:
+    0 12px;
+
+  border-radius: 8px;
+
+  font-family: inherit;
+
+  font-size: 8px;
+  font-weight: 800;
+
+  cursor: pointer;
+}
+
+
+.report-cancel {
+  border:
+    1px solid
+    #e5e7eb;
+
+  background:
+    #ffffff;
+
+  color:
+    #6b7280;
+}
+
+
+.report-submit {
+  border: 0;
+
+  background:
+    #dc2626;
+
+  color: #ffffff;
+}
+
+
+.report-submit:hover:not(:disabled) {
+  background:
+    #b91c1c;
+}
+
+
+.report-cancel:disabled,
+.report-submit:disabled {
+  opacity: 0.55;
+
+  cursor: not-allowed;
+}
+
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+.friends-loading,
+.friends-loading-inline {
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+}
+
+
+.friends-loading {
+  min-height: 100vh;
+
+  gap: 9px;
+}
+
+
+.friends-loading-inline {
+  min-height: 220px;
+
+  gap: 9px;
+
+  color: #6b7280;
+
+  font-size: 8px;
+}
+
+
+.friends-loading h2 {
+  margin: 0;
+
+  font-size: 16px;
+  font-weight: 830;
+}
+
+
+.friends-loading p {
+  margin: 0;
+
+  color: #6b7280;
+
+  font-size: 9px;
+}
+
+
+.friends-spinner {
+  width: 30px;
+  height: 30px;
+
+  border:
+    3px solid
+    #dbeafe;
+
+  border-top-color:
+    #1877f2;
+
+  border-radius: 50%;
+
+  animation:
+    friendsSpin
+    0.7s linear infinite;
+}
+
+
+@keyframes friendsSpin {
+
+  to {
+    transform: rotate(360deg);
+  }
+
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 980px) {
+
+  .friends-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE / TABLET
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+  .friends-topbar {
+    width: 92%;
+
+    min-height: 68px;
+  }
+
+
+  .friends-brand > span {
+    font-size: 16px;
+  }
+
+
+  .friends-brand-mark {
+    width: 37px;
+    height: 37px;
+
+    border-radius: 10px;
+
+    font-size: 16px;
+  }
+
+
+  .friends-top-actions {
+    gap: 4px;
+  }
+
+
+  .friends-nav-button {
+    width: 36px;
+
+    padding: 0;
+
+    font-size: 0;
+  }
+
+
+  .friends-main {
+    width: 92%;
+
+    padding-top: 22px;
+  }
+
+
+  .friends-hero {
+    min-height: 0;
+
+    padding:
+      22px;
+
+    align-items: flex-start;
+  }
+
+
+  .friends-hero h1 {
+    font-size: 23px;
+  }
+
+
+  .friends-hero p {
+    font-size: 9px;
+  }
+
+
+  .friends-hero-icon {
+    width: 55px;
+    height: 55px;
+
+    border-radius: 14px;
+
+    font-size: 22px;
+  }
+
+
+  .friends-tabs {
+    width: 100%;
+
+    overflow-x: auto;
+  }
+
+
+  .friends-tabs button {
+    flex: 1;
+
+    min-width: 95px;
+  }
+
+
+  .friends-toolbar {
+    grid-template-columns: 1fr;
+  }
+
+
+  .friends-grid {
+    grid-template-columns: 1fr;
+  }
+
+
+  .friend-card {
+    padding: 15px;
+  }
+
+
+  .request-card {
+    align-items: flex-start;
+
+    flex-wrap: wrap;
+  }
+
+
+  .request-info {
+    min-width:
+      calc(
+        100% - 100px
+      );
+  }
+
+
+  .request-actions {
+    width: 100%;
+
+    margin-left: 57px;
+  }
+
+
+  .accept-request-button,
+  .reject-request-button {
+    flex: 1;
+  }
+
+
+  .friends-section-heading {
+    margin-top: 18px;
+  }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 430px) {
+
+  .friends-topbar {
+    width: 94%;
+  }
+
+
+  .friends-main {
+    width: 94%;
+  }
+
+
+  .friends-hero {
+    padding:
+      18px;
+  }
+
+
+  .friends-hero h1 {
+    font-size: 20px;
+  }
+
+
+  .friends-hero-icon {
+    width: 45px;
+    height: 45px;
+
+    font-size: 18px;
+  }
+
+
+  .friends-tabs button {
+    min-width:
+      88px;
+
+    padding:
+      0
+      9px;
+  }
+
+
+  .friend-card {
+    padding:
+      13px;
+  }
+
+
+  .friend-message-button {
+    font-size: 7px;
+  }
+
+
+  .request-card {
+    gap: 9px;
+  }
+
+
+  .request-info {
+    min-width:
+      calc(
+        100% - 75px
+      );
+  }
+
+
+  .request-actions {
+    margin-left: 0;
+  }
+
+
+  .blocked-card {
+    padding:
+      10px;
+  }
+
+}
+
+
+/* =========================================================
+   ACCESSIBILITY
+   ========================================================= */
+
+.friends-page button:focus-visible,
+.friends-page input:focus-visible,
+.friends-page select:focus-visible,
+.friends-page textarea:focus-visible {
+  outline:
+    3px solid
+    rgba(
+      24,
+      119,
+      242,
+      0.18
+    );
+
+  outline-offset: 2px;
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation:
+      none !important;
+
+    transition:
+      none !important;
+  }
+
+}
+
+
+.friend-avatar {
+  overflow: hidden;
+}
+
+.friend-avatar-image {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  border-radius: inherit;
+}
+
+.request-avatar {
+  overflow: hidden;
+}
+
+.request-avatar-image {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  border-radius: inherit;
+}
+
+.blocked-avatar {
+  overflow: hidden;
+}
+
+.blocked-avatar-image {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  border-radius: inherit;
+}
+
+/* =========================================================
+   FRIEND ACTION MENU
+   ========================================================= */
+
+.friend-menu-wrap {
+  position: relative;
+}
+
+
+.friend-more-button {
+  width: 48px;
+  height: 48px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 12px;
+
+  background: #ffffff;
+
+  color: #111827;
+
+  cursor: pointer;
+
+  font-size: 22px;
+
+  font-weight: 800;
+
+  line-height: 1;
+
+  transition: 0.18s ease;
+}
+
+
+.friend-more-button:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+
+.friend-action-menu {
+  position: absolute;
+
+  right: 0;
+
+  bottom: calc(100% + 8px);
+
+  z-index: 1000;
+
+  width: 190px;
+
+  padding: 7px;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 14px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 16px 35px
+    rgba(15, 23, 42, 0.14);
+
+  animation:
+    friendMenuIn
+    0.15s ease;
+}
+
+
+.friend-action-menu button {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  padding: 11px 12px;
+
+  border: 0;
+
+  border-radius: 9px;
+
+  background: transparent;
+
+  color: #1f2937;
+
+  cursor: pointer;
+
+  font-family: inherit;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  text-align: left;
+
+  transition: 0.15s ease;
+}
+
+
+.friend-action-menu button:hover {
+  background: #f1f5f9;
+}
+
+
+.friend-action-menu button:nth-child(1):hover {
+  color: #92400e;
+  background: #fff7ed;
+}
+
+
+.friend-action-menu button:nth-child(2):hover {
+  color: #b91c1c;
+  background: #fef2f2;
+}
+
+
+.friend-action-menu button:nth-child(3):hover {
+  color: #9f1239;
+  background: #fff1f2;
+}
+
+
+@keyframes friendMenuIn {
+
+  from {
+    opacity: 0;
+    transform:
+      translateY(5px)
+      scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform:
+      translateY(0)
+      scale(1);
+  }
+
+}
+
+
+@media (max-width: 600px) {
+
+  .friend-action-menu {
+    width: 175px;
+  }
+
+}

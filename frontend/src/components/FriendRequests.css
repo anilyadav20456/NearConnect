@@ -1,0 +1,377 @@
+/* =========================================
+   FRIEND REQUESTS
+========================================= */
+
+.friend-request-list {
+  display: flex;
+  flex-direction: column;
+}
+
+
+/* =========================================
+   ITEM
+========================================= */
+
+.friend-request-item {
+  padding: 13px 0;
+
+  display: grid;
+
+  grid-template-columns:
+    42px minmax(0, 1fr) auto;
+
+  align-items: center;
+
+  gap: 11px;
+
+  border-bottom: 1px solid var(--border);
+}
+
+.friend-request-item:first-child {
+  padding-top: 0;
+}
+
+.friend-request-item:last-child {
+  padding-bottom: 0;
+
+  border-bottom: none;
+}
+
+
+/* =========================================
+   AVATAR
+========================================= */
+
+.friend-request-avatar {
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 11px;
+
+  background: var(--ink);
+
+  color: var(--primary);
+
+  font-size: 14px;
+
+  font-weight: 800;
+}
+
+
+/* =========================================
+   INFO
+========================================= */
+
+.friend-request-info {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.friend-request-info strong {
+  overflow: hidden;
+
+  color: var(--ink);
+
+  font-size: 11px;
+
+  font-weight: 800;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+}
+
+.friend-request-info span {
+  margin-top: 2px;
+
+  overflow: hidden;
+
+  color: var(--muted);
+
+  font-size: 8px;
+
+  font-weight: 500;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+}
+
+.friend-request-info small {
+  margin-top: 4px;
+
+  color: var(--muted-light);
+
+  font-size: 8px;
+
+  font-weight: 500;
+}
+
+
+/* =========================================
+   ACTIONS
+========================================= */
+
+.friend-request-actions {
+  display: flex;
+
+  align-items: center;
+
+  gap: 5px;
+}
+
+.friend-request-actions button {
+  height: 30px;
+
+  padding: 0 9px;
+
+  border-radius: 6px;
+
+  font-size: 8px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    transform .2s ease,
+    background .2s ease;
+}
+
+.friend-request-actions button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.friend-request-actions button:disabled {
+  opacity: .55;
+
+  cursor: not-allowed;
+}
+
+
+/* ACCEPT */
+
+.friend-accept {
+  border: 1px solid var(--ink);
+
+  background: var(--ink);
+
+  color: white;
+}
+
+.friend-accept:hover:not(:disabled) {
+  background: var(--primary);
+
+  color: var(--ink);
+}
+
+
+/* REJECT */
+
+.friend-reject {
+  border: 1px solid var(--border);
+
+  background: white;
+
+  color: var(--muted);
+}
+
+.friend-reject:hover:not(:disabled) {
+  background: var(--background);
+
+  color: var(--ink);
+}
+
+
+/* =========================================
+   EMPTY
+========================================= */
+
+.friend-request-empty {
+  min-height: 160px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 12px;
+}
+
+.friend-request-empty-icon {
+  width: 34px;
+  height: 34px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background: var(--primary-soft);
+
+  color: var(--ink);
+
+  font-size: 12px;
+
+  font-weight: 800;
+}
+
+.friend-request-empty strong {
+  display: block;
+
+  color: var(--ink);
+
+  font-size: 11px;
+
+  font-weight: 800;
+}
+
+.friend-request-empty p {
+  margin: 4px 0 0;
+
+  color: var(--muted);
+
+  font-size: 8px;
+
+  line-height: 1.5;
+
+  font-weight: 500;
+}
+
+
+/* =========================================
+   LOADING
+========================================= */
+
+.friend-request-state {
+  min-height: 160px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 9px;
+
+  color: var(--muted);
+
+  font-size: 9px;
+
+  font-weight: 600;
+}
+
+.friend-request-spinner {
+  width: 17px;
+  height: 17px;
+
+  border: 2px solid var(--primary-soft);
+
+  border-top-color: var(--ink);
+
+  border-radius: 50%;
+
+  animation:
+    friend-spin .7s linear infinite;
+}
+
+@keyframes friend-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+/* =========================================
+   ERROR
+========================================= */
+
+.friend-request-error {
+  min-height: 100px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 7px;
+
+  padding: 15px;
+
+  border-radius: 8px;
+
+  background: #fff8f6;
+
+  color: #91443b;
+
+  font-size: 9px;
+
+  font-weight: 600;
+
+  text-align: center;
+}
+
+.friend-request-error span {
+  width: 20px;
+  height: 20px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #91443b;
+
+  color: white;
+
+  font-size: 8px;
+
+  font-weight: 800;
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+
+  .friend-request-item {
+    grid-template-columns:
+      40px minmax(0, 1fr);
+
+    gap: 10px;
+  }
+
+  .friend-request-actions {
+    grid-column: 2;
+
+    width: 100%;
+  }
+
+  .friend-request-actions button {
+    flex: 1;
+
+    height: 34px;
+  }
+
+  .friend-request-avatar {
+    width: 40px;
+    height: 40px;
+  }
+
+}

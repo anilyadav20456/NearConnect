@@ -1,0 +1,307 @@
+/* =========================================
+   RADIUS SELECTOR
+========================================= */
+
+.radius-selector {
+  width: 100%;
+}
+
+
+/* =========================================
+   OPTIONS
+========================================= */
+
+.radius-options {
+  display: grid;
+
+  grid-template-columns:
+    repeat(5, minmax(0, 1fr));
+
+  gap: 8px;
+}
+
+
+/* =========================================
+   OPTION
+========================================= */
+
+.radius-option {
+  min-height: 62px;
+
+  padding: 8px 5px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border: 1px solid var(--border);
+
+  border-radius: 9px;
+
+  background: #fafbf8;
+
+  color: var(--muted);
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.radius-option:hover {
+  border-color: #cdd3c6;
+
+  background: white;
+
+  color: var(--ink);
+
+  transform: translateY(-1px);
+}
+
+
+/* ACTIVE */
+
+.radius-option.active {
+  border-color: var(--ink);
+
+  background: var(--ink);
+
+  color: white;
+
+  box-shadow:
+    0 7px 18px
+    rgba(17, 19, 15, 0.12);
+
+  transform: translateY(-2px);
+}
+
+
+/* =========================================
+   NUMBER
+========================================= */
+
+.radius-number {
+  font-size: 18px;
+
+  line-height: 1;
+
+  font-weight: 800;
+
+  letter-spacing: -0.5px;
+}
+
+
+/* =========================================
+   KM
+========================================= */
+
+.radius-unit {
+  margin-top: 4px;
+
+  font-size: 8px;
+
+  line-height: 1;
+
+  font-weight: 600;
+
+  opacity: 0.7;
+}
+
+
+/* =========================================
+   SCALE
+========================================= */
+
+.radius-scale {
+  margin-top: 20px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  color: var(--muted-light);
+
+  font-size: 8px;
+
+  font-weight: 600;
+}
+
+
+/* =========================================
+   LINE
+========================================= */
+
+.radius-line {
+  height: 4px;
+
+  position: relative;
+
+  flex: 1;
+
+  border-radius: 10px;
+
+  background: #e7ebe2;
+}
+
+
+/* PROGRESS */
+
+.radius-progress {
+  height: 100%;
+
+  border-radius: inherit;
+
+  background: var(--primary);
+
+  transition: width 0.25s ease;
+}
+
+
+/* =========================================
+   DOTS
+========================================= */
+
+.radius-dot {
+  width: 8px;
+
+  height: 8px;
+
+  position: absolute;
+
+  top: 50%;
+
+  border: 2px solid white;
+
+  border-radius: 50%;
+
+  background: #cbd1c5;
+
+  transform:
+    translate(-50%, -50%);
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.radius-dot:nth-child(1) {
+  left: 0%;
+}
+
+.radius-dot:nth-child(2) {
+  left: 25%;
+}
+
+.radius-dot:nth-child(3) {
+  left: 50%;
+}
+
+.radius-dot:nth-child(4) {
+  left: 75%;
+}
+
+.radius-dot:nth-child(5) {
+  left: 100%;
+}
+
+
+/* ACTIVE DOT */
+
+.radius-dot.active {
+  width: 11px;
+
+  height: 11px;
+
+  background: var(--ink);
+
+  transform:
+    translate(-50%, -50%)
+    scale(1.1);
+}
+
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 700px) {
+
+  .radius-option {
+    min-height: 58px;
+  }
+
+  .radius-number {
+    font-size: 16px;
+  }
+
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 500px) {
+
+  .radius-options {
+    gap: 6px;
+  }
+
+  .radius-option {
+    min-height: 55px;
+
+    border-radius: 8px;
+  }
+
+  .radius-number {
+    font-size: 15px;
+  }
+
+  .radius-unit {
+    font-size: 7px;
+  }
+
+  .radius-scale {
+    margin-top: 16px;
+
+    gap: 7px;
+
+    font-size: 7px;
+  }
+
+}
+
+
+/* =========================================
+   SMALL MOBILE
+========================================= */
+
+@media (max-width: 360px) {
+
+  .radius-options {
+    gap: 4px;
+  }
+
+  .radius-option {
+    min-height: 50px;
+  }
+
+  .radius-number {
+    font-size: 14px;
+  }
+
+  .radius-unit {
+    margin-top: 3px;
+  }
+
+}

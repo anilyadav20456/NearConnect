@@ -1,0 +1,149 @@
+/* =========================================
+   NEARCONNECT NAVBAR
+========================================= */
+
+.nc-navbar {
+  width: 100%;
+
+  background: var(--background);
+
+  border-bottom: 1px solid var(--border);
+}
+
+
+/* =========================================
+   INNER
+========================================= */
+
+.nc-navbar-inner {
+  width: min(1180px, calc(100% - 40px));
+
+  height: 68px;
+
+  margin: 0 auto;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+}
+
+
+/* =========================================
+   BRAND
+========================================= */
+
+.nc-brand {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+}
+
+
+.nc-brand-mark {
+  width: 32px;
+  height: 32px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+
+  background: var(--ink);
+
+  color: var(--primary);
+
+  font-size: 13px;
+
+  font-weight: 800;
+
+  box-shadow:
+    0 4px 10px
+    rgba(17, 19, 15, 0.08);
+}
+
+
+.nc-brand-name {
+  color: var(--ink);
+
+  font-size: 15px;
+
+  font-weight: 800;
+
+  letter-spacing: -0.4px;
+}
+
+
+/* =========================================
+   ACTIONS
+========================================= */
+
+.nc-navbar-actions {
+  display: flex;
+
+  align-items: center;
+
+  gap: 13px;
+}
+
+
+/* =========================================
+   STATUS
+========================================= */
+
+.nc-status {
+  display: flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  color: var(--muted);
+
+  font-size: 9px;
+
+  font-weight: 700;
+}
+
+
+.nc-status-dot {
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+
+  background: var(--primary);
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+
+  .nc-navbar-inner {
+    width: calc(100% - 24px);
+
+    height: 62px;
+  }
+
+  .nc-brand-mark {
+    width: 30px;
+    height: 30px;
+  }
+
+  .nc-brand-name {
+    font-size: 14px;
+  }
+
+  .nc-status {
+    display: none;
+  }
+
+}
