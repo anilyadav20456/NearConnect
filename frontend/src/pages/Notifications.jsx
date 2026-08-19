@@ -21,7 +21,7 @@ import "./Notifications.css";
 
 
 const SOCKET_URL =
-  "http://https://nearconnect-backend-cavd.onrender.com";
+  "https://nearconnect-backend-cavd.onrender.com";
 
 
 function formatNotificationTime(

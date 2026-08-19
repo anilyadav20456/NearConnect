@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./Register.css";
 
-const API = "http://https://nearconnect-backend-cavd.onrender.com";
+const API = "https://nearconnect-backend-cavd.onrender.com";
 
 export default function Register() {
   const navigate = useNavigate();

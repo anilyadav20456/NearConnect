@@ -1,4 +1,4 @@
-const API = "http://https://nearconnect-backend-cavd.onrender.com";
+const API = "https://nearconnect-backend-cavd.onrender.com";
 
 
 // =========================================================

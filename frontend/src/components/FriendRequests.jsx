@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./FriendRequests.css";
 
-const API = "http://https://nearconnect-backend-cavd.onrender.com";
+const API = "https://nearconnect-backend-cavd.onrender.com";
 
 export default function FriendRequests() {
   const [requests, setRequests] = useState([]);

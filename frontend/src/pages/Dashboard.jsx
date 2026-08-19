@@ -21,10 +21,10 @@ import "./Dashboard.css";
 
 
 const API_BASE =
-  "http://https://nearconnect-backend-cavd.onrender.com";
+  "https://nearconnect-backend-cavd.onrender.com";
 
 const SOCKET_URL =
-  "http://https://nearconnect-backend-cavd.onrender.com";
+  "https://nearconnect-backend-cavd.onrender.com";
 
 
 // =========================================================

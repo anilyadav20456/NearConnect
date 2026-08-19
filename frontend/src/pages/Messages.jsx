@@ -20,7 +20,7 @@ import "./Messages.css";
 
 
 const API =
-  "http://https://nearconnect-backend-cavd.onrender.com";
+  "https://nearconnect-backend-cavd.onrender.com";
 
 
 const getProfileImageUrl = (image) => {

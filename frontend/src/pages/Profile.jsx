@@ -17,7 +17,7 @@ import "./Profile.css";
 
 
 const API_BASE =
-  "http://https://nearconnect-backend-cavd.onrender.com";
+  "https://nearconnect-backend-cavd.onrender.com";
 
 
 export default function Profile() {

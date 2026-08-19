@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const API = "http://https://nearconnect-backend-cavd.onrender.com";
+const API = "https://nearconnect-backend-cavd.onrender.com";
 
 export default function LogoutButton() {
   const [loading, setLoading] = useState(false);
