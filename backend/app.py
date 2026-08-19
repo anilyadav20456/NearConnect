@@ -108,8 +108,7 @@ CORS(
         r"/api/*": {
             "origins": [
                 "http://localhost:3000",
-                "http://127.0.0.1:3000",
-                "https://nearconnect-frontend.onrender.com"
+                "http://127.0.0.1:3000"
             ]
         }
     },
@@ -1734,7 +1733,35 @@ def nearby_users(
         )
 
 
-        if distance <= radius:
+        # Radius selector uses separate distance bands:
+        # 2 km = 0 to 2 km
+        # 4 km = greater than 2 km and up to 4 km
+        # 5 km = greater than 4 km and up to 5 km
+
+        if radius == 2:
+
+            in_selected_range = (
+                distance <= 2
+            )
+
+        elif radius == 4:
+
+            in_selected_range = (
+                distance > 2
+                and
+                distance <= 4
+            )
+
+        else:  # radius == 5
+
+            in_selected_range = (
+                distance > 4
+                and
+                distance <= 5
+            )
+
+
+        if in_selected_range:
 
             item = serialize_user(
                 user
@@ -4264,7 +4291,7 @@ if __name__ == "__main__":
     )
 
     print(
-        "http://https://nearconnect-backend-cavd.onrender.com"
+        "http://127.0.0.1:5001"
     )
 
     print(
@@ -4275,7 +4302,7 @@ if __name__ == "__main__":
     socketio.run(
         app,
         host="0.0.0.0",
-        port=int(os.environ.get("PORT", 5001)),
-        debug=False,
+        port=5001,
+        debug=True,
         allow_unsafe_werkzeug=True
     )
