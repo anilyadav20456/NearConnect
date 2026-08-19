@@ -21,10 +21,10 @@ import "./Dashboard.css";
 
 
 const API_BASE =
-  "https://nearconnect-backend-cavd.onrender.com";
+  "http://127.0.0.1:5001";
 
 const SOCKET_URL =
-  "https://nearconnect-backend-cavd.onrender.com";
+  "http://127.0.0.1:5001";
 
 
 // =========================================================
@@ -95,22 +95,6 @@ export default function Dashboard() {
     nearbyPeople,
     setNearbyPeople
   ] = useState([]);
-
-  // Nearby profile popup
-  const [
-    selectedPerson,
-    setSelectedPerson
-  ] = useState(null);
-
-  const [
-    friendRequestLoading,
-    setFriendRequestLoading
-  ] = useState(false);
-
-  const [
-    friendRequestSent,
-    setFriendRequestSent
-  ] = useState(false);
 
   const [
     friendRequests,
@@ -363,114 +347,6 @@ export default function Dashboard() {
       }
 
     };
-
-
-  // =======================================================
-  // NEARBY PROFILE
-  // =======================================================
-
-  const openPersonProfile = (
-    person
-  ) => {
-
-    setSelectedPerson(
-      person
-    );
-
-    setFriendRequestSent(
-      false
-    );
-
-  };
-
-
-  const closePersonProfile = () => {
-
-    if (
-      friendRequestLoading
-    ) {
-      return;
-    }
-
-    setSelectedPerson(
-      null
-    );
-
-    setFriendRequestSent(
-      false
-    );
-
-  };
-
-
-  const sendFriendRequest = async () => {
-
-    if (
-      !selectedPerson ||
-      friendRequestLoading ||
-      friendRequestSent
-    ) {
-      return;
-    }
-
-    try {
-
-      setFriendRequestLoading(
-        true
-      );
-
-      setError("");
-
-      await apiFetch(
-        "/api/friends/request",
-        {
-          method:
-            "POST",
-
-          body:
-            JSON.stringify({
-              receiver_id:
-                selectedPerson.id
-            })
-        }
-      );
-
-      setFriendRequestSent(
-        true
-      );
-
-      // Keep the existing request list in sync.
-      const requestsData =
-        await apiFetch(
-          "/api/friends/requests"
-        );
-
-      setFriendRequests(
-        requestsData?.requests ||
-        []
-      );
-
-    } catch (err) {
-
-      console.error(
-        "SEND FRIEND REQUEST:",
-        err
-      );
-
-      setError(
-        err.message ||
-        "Unable to send friend request."
-      );
-
-    } finally {
-
-      setFriendRequestLoading(
-        false
-      );
-
-    }
-
-  };
 
 
   // =======================================================
@@ -2138,30 +2014,7 @@ export default function Dashboard() {
                     key={
                       person.id
                     }
-                    className="person-card person-card-clickable"
-                    onClick={() =>
-                      openPersonProfile(
-                        person
-                      )
-                    }
-                    role="button"
-                    tabIndex={0}
-                    onKeyDown={event => {
-
-                      if (
-                        event.key === "Enter" ||
-                        event.key === " "
-                      ) {
-
-                        event.preventDefault();
-
-                        openPersonProfile(
-                          person
-                        );
-
-                      }
-
-                    }}
+                    className="person-card"
                   >
 
                     <div className="person-card-top">
@@ -2387,254 +2240,80 @@ export default function Dashboard() {
 
         </section>
 
-      {/* =================================================
-          NEARBY PROFILE POPUP
-      ================================================= */}
-
-      {selectedPerson && (
-
-        <div
-          className="nearby-profile-overlay"
-          onClick={
-            closePersonProfile
-          }
+        {/* =================================================
+            MOBILE BOTTOM NAVIGATION
+        ================================================= */}
+        <nav
+          className="mobile-bottom-nav"
+          aria-label="Mobile navigation"
         >
 
-          <div
-            className="nearby-profile-modal"
-            onClick={event =>
-              event.stopPropagation()
-            }
+          <button
+            type="button"
+            onClick={goDashboard}
+            aria-label="Home"
           >
-
-            <button
-              type="button"
-              className="nearby-profile-close"
-              onClick={
-                closePersonProfile
-              }
-              aria-label="Close profile"
-            >
-              ×
-            </button>
-
-
-            <div className="nearby-profile-header">
-
-              <div className="nearby-profile-avatar">
-
-                {selectedPerson.profile_image ? (
-
-                  <img
-                    src={
-                      getProfileImageUrl(
-                        selectedPerson.profile_image
-                      )
-                    }
-                    alt={
-                      selectedPerson.name ||
-                      selectedPerson.username ||
-                      "User"
-                    }
-                  />
-
-                ) : (
-
-                  getInitial(
-                    selectedPerson
-                  )
-
-                )}
-
-              </div>
-
-            </div>
-
-
-            <div className="nearby-profile-body">
-
-              <div className="nearby-profile-title">
-
-                <div>
-
-                  <h2>
-                    {
-                      selectedPerson.name ||
-                      selectedPerson.username ||
-                      "User"
-                    }
-                  </h2>
-
-                  <span>
-                    @
-                    {
-                      selectedPerson.username ||
-                      ""
-                    }
-                  </span>
-
-                </div>
-
-
-                {selectedPerson.is_online && (
-
-                  <span className="nearby-profile-online">
-                    ● Online
-                  </span>
-
-                )}
-
-              </div>
-
-
-              {selectedPerson.profession && (
-
-                <div className="nearby-profile-row">
-
-                  <span>
-                    💼
-                  </span>
-
-                  <div>
-
-                    <small>
-                      PROFESSION
-                    </small>
-
-                    <strong>
-                      {
-                        selectedPerson.profession
-                      }
-                    </strong>
-
-                  </div>
-
-                </div>
-
-              )}
-
-
-              {selectedPerson.bio && (
-
-                <div className="nearby-profile-section">
-
-                  <small>
-                    ABOUT
-                  </small>
-
-                  <p>
-                    {
-                      selectedPerson.bio
-                    }
-                  </p>
-
-                </div>
-
-              )}
-
-
-              {selectedPerson.interests && (
-
-                <div className="nearby-profile-section">
-
-                  <small>
-                    INTERESTS
-                  </small>
-
-                  <div className="nearby-profile-tags">
-
-                    {
-                      selectedPerson.interests
-                        .split(",")
-                        .map(
-                          (interest, index) => (
-
-                            <span
-                              key={
-                                index
-                              }
-                            >
-                              {
-                                interest.trim()
-                              }
-                            </span>
-
-                          )
-                        )
-                    }
-
-                  </div>
-
-                </div>
-
-              )}
-
-
-              {selectedPerson.distance !==
-                undefined && (
-
-                <div className="nearby-profile-distance">
-
-                  📍{" "}
-
-                  <strong>
-                    {
-                      selectedPerson.distance
-                    } km
-                  </strong>
-
-                  {" "}away
-
-                </div>
-
-              )}
-
-
-              <div className="nearby-profile-actions">
-
-                <button
-                  type="button"
-                  className="nearby-add-friend-button"
-                  onClick={
-                    sendFriendRequest
-                  }
-                  disabled={
-                    friendRequestLoading ||
-                    friendRequestSent
-                  }
-                >
-
-                  {
-                    friendRequestLoading
-                      ? "Sending..."
-                      : friendRequestSent
-                      ? "✓ Request Sent"
-                      : "👤 Add Friend"
-                  }
-
-                </button>
-
-
-                <button
-                  type="button"
-                  className="nearby-close-button"
-                  onClick={
-                    closePersonProfile
-                  }
-                >
-                  Close
-                </button>
-
-              </div>
-
-            </div>
-
-          </div>
-
-        </div>
-
-      )}
-
+            <span aria-hidden="true">⌂</span>
+            <small>Home</small>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => navigate("/nearby")}
+            aria-label="Nearby"
+          >
+            <span aria-hidden="true">⌖</span>
+            <small>Nearby</small>
+          </button>
+
+          <button
+            type="button"
+            onClick={openFriends}
+            aria-label="Friends"
+          >
+            <span aria-hidden="true">♣</span>
+            <small>Friends</small>
+          </button>
+
+          <button
+            type="button"
+            onClick={openMessages}
+            className="mobile-nav-with-badge"
+            aria-label="Messages"
+          >
+            <span aria-hidden="true">◌</span>
+
+            {unreadMessages > 0 && (
+              <b className="mobile-nav-badge">
+                {unreadMessages > 99
+                  ? "99+"
+                  : unreadMessages}
+              </b>
+            )}
+
+            <small>Messages</small>
+          </button>
+
+          <button
+            type="button"
+            onClick={openNotifications}
+            className="mobile-nav-with-badge"
+            aria-label="Notifications"
+          >
+            <span aria-hidden="true">♧</span>
+
+            {unreadNotifications > 0 && (
+              <b className="mobile-nav-badge">
+                {unreadNotifications > 99
+                  ? "99+"
+                  : unreadNotifications}
+              </b>
+            )}
+
+            <small>Alerts</small>
+          </button>
+
+        </nav>
 
       </main>
 
