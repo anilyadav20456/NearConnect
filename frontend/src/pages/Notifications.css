@@ -1359,3 +1359,182 @@ button:focus-visible {
   }
 
 }
+
+
+
+/* =========================================================
+   NEARCONNECT — MOBILE NOTIFICATIONS
+   ========================================================= */
+
+@media (max-width: 767px) {
+
+  .notifications-page {
+    width: 100% !important;
+    min-height: 100dvh !important;
+    overflow-x: hidden !important;
+    padding-bottom: 90px !important;
+  }
+
+  .notifications-header {
+    width: 100% !important;
+    padding: 12px 14px !important;
+    gap: 10px !important;
+    overflow: hidden !important;
+  }
+
+  .notifications-header-left {
+    min-width: 0 !important;
+    flex: 1 1 auto !important;
+  }
+
+  .notifications-header-left h1 {
+    font-size: 24px !important;
+    line-height: 1.1 !important;
+  }
+
+  .notifications-header-left p {
+    font-size: 12px !important;
+  }
+
+  .notifications-header-actions {
+    flex: 0 0 auto !important;
+    gap: 6px !important;
+  }
+
+  .notifications-header-actions button {
+    min-width: 40px !important;
+    width: 40px !important;
+    height: 40px !important;
+    padding: 0 !important;
+    border-radius: 12px !important;
+    font-size: 0 !important;
+  }
+
+  .notifications-header-actions button:first-child::before {
+    content: "←";
+    font-size: 18px;
+  }
+
+  .notifications-header-actions button:nth-child(2)::before {
+    content: "✓";
+    font-size: 17px;
+  }
+
+  .notifications-header-actions button:nth-child(3)::before {
+    content: "×";
+    font-size: 18px;
+  }
+
+  .notifications-content {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 12px !important;
+  }
+
+  .notifications-list {
+    width: 100% !important;
+  }
+
+  .notification-card {
+    width: 100% !important;
+    min-width: 0 !important;
+    padding: 14px !important;
+
+    display: grid !important;
+    grid-template-columns: auto minmax(0, 1fr) auto !important;
+    gap: 10px !important;
+
+    border-radius: 16px !important;
+  }
+
+  .notification-icon {
+    width: 42px !important;
+    height: 42px !important;
+    min-width: 42px !important;
+  }
+
+  .notification-content {
+    min-width: 0 !important;
+  }
+
+  .notification-content h3 {
+    font-size: 14px !important;
+    line-height: 1.25 !important;
+  }
+
+  .notification-content p {
+    font-size: 12px !important;
+    line-height: 1.45 !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  .notification-time {
+    font-size: 10px !important;
+    white-space: nowrap !important;
+  }
+
+  .notification-unread {
+    width: 8px !important;
+    height: 8px !important;
+    min-width: 8px !important;
+    border-radius: 50% !important;
+  }
+
+  .notifications-empty {
+    width: 100% !important;
+    padding: 50px 20px !important;
+  }
+
+  .notifications-empty h2 {
+    font-size: 22px !important;
+  }
+
+  .notifications-empty p {
+    font-size: 13px !important;
+  }
+
+  .notifications-loading {
+    min-height: 70dvh !important;
+    padding: 30px 16px !important;
+  }
+
+  .notifications-error {
+    margin: 12px !important;
+    font-size: 13px !important;
+  }
+}
+
+
+/* =========================================================
+   VERY SMALL PHONES
+   ========================================================= */
+
+@media (max-width: 390px) {
+
+  .notifications-content {
+    padding: 8px !important;
+  }
+
+  .notification-card {
+    padding: 11px !important;
+    gap: 8px !important;
+  }
+
+  .notification-icon {
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+  }
+
+  .notification-content h3 {
+    font-size: 13px !important;
+  }
+
+  .notification-content p {
+    font-size: 11px !important;
+  }
+
+  .notification-time {
+    font-size: 9px !important;
+  }
+}
