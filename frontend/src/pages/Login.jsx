@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 import "./Login.css";
 
-const API = "http://127.0.0.1:5001";
+const API = "http://https://nearconnect-backend-cavd.onrender.com";
 
 export default function Login() {
   const navigate = useNavigate();

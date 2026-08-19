@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./PersonCard.css";
 
-const API = "http://127.0.0.1:5001";
+const API = "http://https://nearconnect-backend-cavd.onrender.com";
 
 export default function PersonCard({ person }) {
 

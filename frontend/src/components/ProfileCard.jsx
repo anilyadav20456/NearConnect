@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./ProfileCard.css";
 
-const API = "http://127.0.0.1:5001";
+const API = "http://https://nearconnect-backend-cavd.onrender.com";
 
 export default function ProfileCard() {
   const [profile, setProfile] = useState(null);
