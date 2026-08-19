@@ -1,29 +1,8 @@
 /* =========================================================
-   NEARCONNECT - RESPONSIVE LAYOUT PATCH
-   CSS ONLY
-   Covers mobile / tablet / laptop / desktop.
-   DO NOT remove existing page CSS.
-   Import this file after the existing CSS files.
+   NEARCONNECT — RESPONSIVE SYSTEM
+   Desktop → Tablet → Mobile
+   No horizontal overflow
    ========================================================= */
-
-/* ---------- GLOBAL SAFETY ---------- */
-
-html,
-body,
-#root {
-  width: 100%;
-  min-height: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-html {
-  overflow-x: hidden;
-}
-
-body {
-  overflow-x: hidden;
-}
 
 *,
 *::before,
@@ -31,1155 +10,594 @@ body {
   box-sizing: border-box;
 }
 
-img,
-svg,
-video {
-  max-width: 100%;
-}
-
-button,
-input,
-textarea,
-select {
-  max-width: 100%;
-}
-
-button,
-a,
-input,
-textarea,
-select {
-  -webkit-tap-highlight-color: transparent;
-}
-
-button {
-  touch-action: manipulation;
-}
-
-input,
-textarea,
-select {
-  font-size: 16px;
-}
-
-
-/* =========================================================
-   DASHBOARD
-   ========================================================= */
-
-.dashboard-page {
-  width: 100%;
-  min-height: 100vh;
-  overflow-x: hidden;
-}
-
-.dashboard-topbar {
-  width: 100%;
-  min-height: 70px;
-  padding-left: clamp(14px, 2vw, 32px);
-  padding-right: clamp(14px, 2vw, 32px);
-}
-
-.dashboard-user-actions {
-  min-width: 0;
-  flex-wrap: wrap;
-}
-
-.dashboard-nav-button,
-.dashboard-messages-button,
-.dashboard-notifications-button,
-.dashboard-settings-button,
-.dashboard-logout,
-.dashboard-user-button {
-  min-height: 42px;
-  white-space: nowrap;
-}
-
-.dashboard-main,
-.dashboard-content,
-.dashboard-container {
-  width: min(1400px, 100%);
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: clamp(14px, 2.5vw, 36px);
-  padding-right: clamp(14px, 2.5vw, 36px);
-}
-
-.dashboard-section,
-.dashboard-profile,
-.dashboard-location {
-  width: 100%;
-  min-width: 0;
-}
-
-.dashboard-profile,
-.dashboard-location {
-  overflow: hidden;
-}
-
-.people-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: clamp(12px, 1.5vw, 20px);
-}
-
-.person-card {
-  min-width: 0;
-  overflow: hidden;
-}
-
-.person-card h3,
-.person-username,
-.person-card p,
-.person-card .distance {
-  overflow-wrap: anywhere;
-}
-
-.requests-list {
-  width: 100%;
-}
-
-.request-card {
-  min-width: 0;
-}
-
-.request-card > div {
-  min-width: 0;
-}
-
-.section-heading {
-  gap: 12px;
-}
-
-.dashboard-profile {
-  min-width: 0;
-}
-
-.dashboard-profile-edit {
-  flex-shrink: 0;
-}
-
-.dashboard-location {
-  min-height: 0;
-}
-
-.radius-selector,
-.radius-options {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.radius-selector button,
-.radius-options button {
-  min-height: 44px;
-  touch-action: manipulation;
-}
-
-.nearby-profile-overlay {
-  padding:
-    max(12px, env(safe-area-inset-top))
-    max(12px, env(safe-area-inset-right))
-    max(12px, env(safe-area-inset-bottom))
-    max(12px, env(safe-area-inset-left));
-}
-
-.nearby-profile-modal {
-  width: min(520px, 100%);
-  max-height: min(90vh, 760px);
-}
-
-.nearby-profile-body,
-.nearby-profile-actions {
-  min-width: 0;
-}
-
-.nearby-profile-title {
-  min-width: 0;
-}
-
-.nearby-profile-title > div {
-  min-width: 0;
-}
-
-.nearby-profile-title h2 {
-  overflow-wrap: anywhere;
-}
-
-.nearby-profile-actions button {
-  min-height: 48px;
-}
-
-
-/* =========================================================
-   FRIENDS
-   ========================================================= */
-
-.friends-page,
-.friends-container,
-.friends-content {
+html {
   width: 100%;
   max-width: 100%;
   overflow-x: hidden;
 }
 
-.friends-header,
-.friends-toolbar,
-.friends-tabs,
-.friends-grid {
-  min-width: 0;
-}
-
-.friends-toolbar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.friends-search,
-.friend-search,
-.friends-toolbar input,
-.friends-toolbar select {
-  min-width: 0;
+body {
   width: 100%;
   max-width: 100%;
-}
-
-.friends-tabs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.friends-tabs button {
-  min-height: 42px;
-}
-
-.friends-grid,
-.friend-list {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
-}
-
-.friend-card {
-  min-width: 0;
-  overflow: visible;
-}
-
-.friend-card-content {
-  min-width: 0;
-}
-
-.friend-card h3,
-.friend-card strong,
-.friend-card p,
-.friend-card span {
-  overflow-wrap: anywhere;
-}
-
-.friend-actions {
-  min-width: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.friend-message-button,
-.friend-more-button {
-  min-height: 44px;
-}
-
-.friend-menu-wrap {
-  position: relative;
-}
-
-.friend-action-menu {
-  max-width: calc(100vw - 24px);
-}
-
-.report-modal,
-.report-dialog {
-  width: min(540px, calc(100vw - 24px));
-  max-height: calc(100vh - 24px);
-  overflow-y: auto;
-}
-
-
-/* =========================================================
-   MESSAGES / CHAT
-   ========================================================= */
-
-.messages-page,
-.messages-layout,
-.messages-shell {
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-  overflow: hidden;
-}
-
-.messages-layout {
-  display: grid;
-  grid-template-columns: minmax(260px, 330px) minmax(0, 1fr);
-}
-
-.conversation-sidebar,
-.chat-panel {
-  min-width: 0;
-}
-
-.conversation-list {
-  min-width: 0;
-  overflow-x: hidden;
-  overflow-y: auto;
-}
-
-.conversation-item {
-  width: 100%;
-  min-width: 0;
-  text-align: left;
-}
-
-.conversation-avatar {
-  flex: 0 0 auto;
-}
-
-.conversation-details {
-  min-width: 0;
-}
-
-.conversation-name-row,
-.conversation-preview {
-  min-width: 0;
-}
-
-.conversation-name-row strong,
-.conversation-preview span {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.chat-panel {
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-}
-
-.chat-header,
-.chat-body,
-.chat-footer,
-.chat-input-area {
-  min-width: 0;
-}
-
-.chat-body,
-.messages-list,
-.chat-messages {
-  overflow-x: hidden;
-  overflow-y: auto;
-}
-
-.chat-input-area,
-.chat-footer {
-  padding-bottom: max(
-    10px,
-    env(safe-area-inset-bottom)
-  );
-}
-
-.chat-input-area textarea,
-.chat-input-area input {
-  min-width: 0;
-  width: 100%;
-}
-
-.chat-send-button,
-.chat-footer button {
-  min-width: 44px;
-  min-height: 44px;
-}
-
-.mobile-chat-back {
-  min-width: 44px;
-  min-height: 44px;
-  touch-action: manipulation;
-}
-
-
-/* =========================================================
-   NOTIFICATIONS
-   ========================================================= */
-
-.notifications-page {
-  width: 100%;
-  min-height: 100vh;
+  margin: 0;
   overflow-x: hidden;
 }
 
-.notifications-header,
-.notifications-main,
-.notifications-content {
-  width: 100%;
-  min-width: 0;
-}
-
-.notification-list {
-  width: min(860px, 100%);
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.notification-card {
-  min-width: 0;
-}
-
-.notification-content {
-  min-width: 0;
-}
-
-.notification-content h3,
-.notification-content p {
-  overflow-wrap: anywhere;
-}
-
-.notification-open {
-  flex: 0 0 auto;
-  min-width: 44px;
-  min-height: 44px;
-}
-
-.notifications-empty {
-  width: min(620px, 100%);
-}
-
-
-/* =========================================================
-   PROFILE
-   ========================================================= */
-
-.profile-page,
-.profile-main,
-.profile-container {
+#root {
   width: 100%;
   max-width: 100%;
   overflow-x: hidden;
 }
 
-.profile-card {
-  width: min(900px, 100%);
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.profile-card-header {
-  min-width: 0;
-  flex-wrap: wrap;
-}
-
-.profile-identity {
-  min-width: 0;
-  flex: 1 1 240px;
-}
-
-.profile-name-line {
-  min-width: 0;
-  flex-wrap: wrap;
-}
-
-.profile-name-line h2 {
-  overflow-wrap: anywhere;
-}
-
-.profile-edit-form {
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
-}
-
-.form-section-title {
-  grid-column: 1 / -1;
-}
-
-.profile-field {
-  min-width: 0;
-}
-
-.profile-field input,
-.profile-field textarea,
-.profile-field select {
-  width: 100%;
-  min-width: 0;
-}
-
-.edit-profile-btn,
-.profile-save-btn,
-.profile-cancel-btn {
-  min-height: 46px;
-}
-
-
-/* =========================================================
-   SETTINGS
-   ========================================================= */
-
-.settings-page,
-.settings-main,
-.settings-container {
-  width: 100%;
+/* Prevent images from creating overflow */
+img {
   max-width: 100%;
-  overflow-x: hidden;
 }
-
-.settings-layout {
-  width: min(1180px, 100%);
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.settings-sidebar {
-  min-width: 0;
-}
-
-.settings-content {
-  min-width: 0;
-}
-
-.settings-row,
-.setting-row {
-  min-width: 0;
-  flex-wrap: wrap;
-}
-
-.settings-row > *,
-.setting-row > * {
-  min-width: 0;
-}
-
-
-/* =========================================================
-   LOGIN / REGISTER
-   ========================================================= */
-
-.login-page,
-.register-page {
-  width: 100%;
-  min-height: 100vh;
-  overflow-x: hidden;
-}
-
-.login-navbar,
-.register-navbar {
-  padding-left: clamp(14px, 3vw, 44px);
-  padding-right: clamp(14px, 3vw, 44px);
-}
-
-.login-main,
-.register-main {
-  width: 100%;
-  padding-left: clamp(12px, 4vw, 48px);
-  padding-right: clamp(12px, 4vw, 48px);
-}
-
-.login-card,
-.register-card {
-  width: min(1100px, 100%);
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.login-form,
-.register-form {
-  width: 100%;
-}
-
-.login-form input,
-.login-form select,
-.login-form textarea,
-.register-form input,
-.register-form select,
-.register-form textarea {
-  width: 100%;
-  min-width: 0;
-}
-
-
-/* =========================================================
-   COMMON TOUCH TARGETS
-   ========================================================= */
-
-@media (pointer: coarse) {
-  button,
-  [role="button"],
-  a {
-    min-height: 44px;
-  }
-}
-
-
-/* =========================================================
-   LARGE DESKTOP
-   ========================================================= */
-
-@media (min-width: 1440px) {
-  .people-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-
-  .friends-grid,
-  .friend-list {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-
-  .dashboard-main,
-  .dashboard-content,
-  .dashboard-container {
-    padding-left: 40px;
-    padding-right: 40px;
-  }
-}
-
-
-/* =========================================================
-   LAPTOP
-   992 - 1199
-   ========================================================= */
-
-@media (max-width: 1199px) {
-  .people-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .friends-grid,
-  .friend-list {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .messages-layout {
-    grid-template-columns: minmax(240px, 300px) minmax(0, 1fr);
-  }
-}
-
 
 /* =========================================================
    TABLET
-   768 - 991
    ========================================================= */
 
-@media (max-width: 991px) {
-  .dashboard-topbar {
-    min-height: 64px;
-  }
+@media (max-width: 1024px) {
 
   .dashboard-topbar {
-    gap: 10px;
+    padding: 12px 18px !important;
+    gap: 12px !important;
   }
 
   .dashboard-user-actions {
-    gap: 6px;
+    gap: 8px !important;
+    flex-wrap: nowrap !important;
   }
 
-  .dashboard-user-actions strong {
-    display: none;
+  .dashboard-nav-button,
+  .dashboard-messages-button,
+  .dashboard-notifications-button,
+  .dashboard-settings-button,
+  .dashboard-logout,
+  .dashboard-user-button {
+    min-height: 46px !important;
+    padding: 10px 14px !important;
+    white-space: nowrap;
   }
 
-  .dashboard-user-button,
+  .dashboard-page {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+  }
+
+  .dashboard-profile,
+  .dashboard-location,
+  .dashboard-section,
+  .dashboard-welcome {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .people-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 767px) {
+
+  html,
+  body,
+  #root {
+    width: 100%;
+    min-width: 0;
+    overflow-x: hidden !important;
+  }
+
+  /* -------------------------------------------------------
+     TOP BAR
+     ------------------------------------------------------- */
+
+  .dashboard-topbar {
+    width: 100% !important;
+    max-width: 100% !important;
+
+    min-height: 64px !important;
+
+    padding:
+      10px 12px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+
+    gap: 8px !important;
+
+    overflow: hidden !important;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+
+  /* Compact logo */
+  .dashboard-brand {
+    flex: 0 0 auto !important;
+    min-width: 44px !important;
+    max-width: 44px !important;
+
+    padding: 0 !important;
+    margin: 0 !important;
+
+    border: 0 !important;
+    background: transparent !important;
+  }
+
+  .dashboard-brand-mark {
+    width: 42px !important;
+    height: 42px !important;
+    min-width: 42px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    border-radius: 13px !important;
+
+    font-size: 20px !important;
+    font-weight: 900 !important;
+  }
+
+  /* Hide "NearConnect" word on small screens */
+  .dashboard-brand > span {
+    display: none !important;
+  }
+
+  /* -------------------------------------------------------
+     NAV ACTIONS
+     ------------------------------------------------------- */
+
+  .dashboard-user-actions {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+
+    gap: 6px !important;
+
+    overflow: hidden !important;
+  }
+
+  /* Profile button */
+  .dashboard-user-button {
+    flex: 0 0 auto !important;
+
+    width: 44px !important;
+    min-width: 44px !important;
+    height: 44px !important;
+
+    padding: 4px !important;
+
+    justify-content: center !important;
+    gap: 0 !important;
+  }
+
+  .dashboard-user-button strong {
+    display: none !important;
+  }
+
+  .dashboard-avatar {
+    width: 34px !important;
+    height: 34px !important;
+    min-width: 34px !important;
+  }
+
+  /* All icon navigation buttons */
   .dashboard-nav-button,
   .dashboard-messages-button,
   .dashboard-notifications-button,
   .dashboard-settings-button,
   .dashboard-logout {
-    padding-left: 10px;
-    padding-right: 10px;
+    position: relative !important;
+
+    flex: 0 0 44px !important;
+
+    width: 44px !important;
+    min-width: 44px !important;
+    height: 44px !important;
+
+    padding: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    border-radius: 13px !important;
+
+    font-size: 0 !important;
   }
 
-  .people-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .friends-grid,
-  .friend-list {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .messages-layout {
-    grid-template-columns: 280px minmax(0, 1fr);
-  }
-
-  .profile-edit-form {
-    grid-template-columns: 1fr;
-  }
-
-  .form-section-title {
-    grid-column: auto;
-  }
-
-  .settings-layout {
-    grid-template-columns: 1fr;
-  }
-}
-
-
-/* =========================================================
-   SMALL TABLET / LARGE PHONE
-   576 - 767
-   ========================================================= */
-
-@media (max-width: 767px) {
-  .dashboard-topbar {
-    min-height: 58px;
-    padding-top: 8px;
-    padding-bottom: 8px;
-  }
-
-  .dashboard-brand span {
-    display: none;
-  }
-
-  .dashboard-user-actions {
-    width: auto;
-    margin-left: auto;
-    justify-content: flex-end;
-  }
-
-  .dashboard-user-button strong,
-  .dashboard-settings-button,
-  .dashboard-logout {
-    display: none;
-  }
-
-  .dashboard-nav-button,
-  .dashboard-messages-button,
-  .dashboard-notifications-button {
-    font-size: 0;
-    width: 44px;
-    min-width: 44px;
-    padding: 0;
-    justify-content: center;
-  }
-
-  .dashboard-nav-button::first-letter,
-  .dashboard-messages-button::first-letter,
-  .dashboard-notifications-button::first-letter {
+  /* Friends */
+  .dashboard-nav-button::before {
+    content: "👥";
     font-size: 18px;
   }
 
+  /* Messages */
+  .dashboard-messages-button::before {
+    content: "💬";
+    font-size: 18px;
+  }
+
+  /* Notifications */
+  .dashboard-notifications-button::before {
+    content: "🔔";
+    font-size: 18px;
+  }
+
+  /* Settings */
+  .dashboard-settings-button::before {
+    content: "⚙";
+    font-size: 18px;
+  }
+
+  /* Logout */
+  .dashboard-logout::before {
+    content: "↪";
+    font-size: 18px;
+  }
+
+  /* Make badges visible again */
   .dashboard-unread-badge,
-  .dashboard-notification-badge,
-  .dashboard-friend-request-badge {
-    top: -3px;
-    right: -3px;
+  .dashboard-notification-badge {
+    position: absolute !important;
+
+    top: -3px !important;
+    right: -3px !important;
+
+    width: 19px !important;
+    height: 19px !important;
+    min-width: 19px !important;
+
+    padding: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    border-radius: 50% !important;
+
+    font-size: 10px !important;
+    font-weight: 800 !important;
+
+    line-height: 1 !important;
+
+    z-index: 5 !important;
   }
 
-  .dashboard-main,
-  .dashboard-content,
-  .dashboard-container {
-    padding-left: 12px;
-    padding-right: 12px;
+  /* -------------------------------------------------------
+     MAIN PAGE
+     ------------------------------------------------------- */
+
+  .dashboard-page {
+    width: 100% !important;
+    max-width: 100% !important;
+
+    padding:
+      10px !important;
+
+    overflow-x: hidden !important;
   }
 
-  .people-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
+  /* -------------------------------------------------------
+     WELCOME HERO
+     ------------------------------------------------------- */
+
+  .dashboard-welcome {
+    width: 100% !important;
+    min-height: 360px !important;
+
+    padding:
+      32px 22px !important;
+
+    border-radius: 24px !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+
+    overflow: hidden !important;
   }
 
-  .person-card {
-    padding: 12px;
+  .dashboard-welcome h1 {
+    max-width: 100% !important;
+
+    font-size:
+      clamp(40px, 11vw, 58px) !important;
+
+    line-height: 0.95 !important;
+
+    letter-spacing: -2.5px !important;
   }
 
-  .person-avatar {
-    width: 58px;
-    height: 58px;
+  .dashboard-welcome p {
+    max-width: 100% !important;
+
+    font-size: 15px !important;
+    line-height: 1.55 !important;
   }
 
-  .friends-grid,
-  .friend-list {
-    grid-template-columns: 1fr;
+  .dashboard-welcome-icon {
+    width: 130px !important;
+    height: 130px !important;
+
+    margin:
+      20px auto 0 !important;
   }
 
-  .friends-toolbar {
-    display: grid;
-    grid-template-columns: 1fr;
+  /* -------------------------------------------------------
+     PROFILE
+     ------------------------------------------------------- */
+
+  .dashboard-profile {
+    width: 100% !important;
+
+    display: grid !important;
+
+    grid-template-columns:
+      auto minmax(0, 1fr) !important;
+
+    align-items: center !important;
+
+    gap: 14px !important;
+
+    padding:
+      20px !important;
+
+    border-radius: 20px !important;
   }
 
-  .friends-tabs {
-    overflow-x: auto;
-    flex-wrap: nowrap;
-    padding-bottom: 3px;
+  .profile-avatar {
+    width: 70px !important;
+    height: 70px !important;
+    min-width: 70px !important;
   }
 
-  .friends-tabs button {
-    flex: 0 0 auto;
+  .profile-content {
+    min-width: 0 !important;
   }
 
-  .messages-layout {
-    display: block;
-    height: calc(100dvh - 58px);
-    min-height: 0;
+  .profile-content h2 {
+    font-size: 22px !important;
+    line-height: 1.1 !important;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  .conversation-sidebar {
-    width: 100%;
-    height: 100%;
+  .profile-content p {
+    margin-top: 5px !important;
+    font-size: 13px !important;
   }
 
-  .chat-panel {
-    width: 100%;
-    height: 100%;
+  .profile-meta {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 6px !important;
   }
 
-  .chat-panel.chat-panel-empty {
-    display: none;
+  .profile-meta span {
+    max-width: 100% !important;
+
+    font-size: 11px !important;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  .messages-layout.has-active-chat .conversation-sidebar {
-    display: none;
+  .dashboard-profile-edit {
+    grid-column: 1 / -1 !important;
+
+    width: 100% !important;
+    margin-top: 4px !important;
   }
 
-  .messages-layout.has-active-chat .chat-panel {
-    display: flex;
+  /* -------------------------------------------------------
+     LOCATION
+     ------------------------------------------------------- */
+
+  .dashboard-location {
+    width: 100% !important;
+
+    padding:
+      22px 18px !important;
+
+    border-radius: 20px !important;
+
+    display: block !important;
   }
 
-  .notification-list {
-    width: 100%;
+  .dashboard-location h2 {
+    font-size: 27px !important;
+    line-height: 1.1 !important;
   }
 
-  .notification-card {
-    align-items: flex-start;
-    gap: 10px;
-    padding: 12px;
+  .dashboard-location p {
+    font-size: 14px !important;
   }
 
-  .notification-icon {
-    flex: 0 0 42px;
-    width: 42px;
-    height: 42px;
-  }
-
-  .notification-meta {
-    flex-wrap: wrap;
-  }
-
-  .notifications-header {
-    min-height: 58px;
-  }
-
-  .profile-card {
-    padding: 16px;
-  }
-
-  .profile-card-header {
-    align-items: center;
-  }
-
-  .edit-profile-btn {
-    width: 100%;
-  }
-
-  .settings-layout {
-    display: block;
-  }
-
-  .settings-sidebar {
-    width: 100%;
-    overflow-x: auto;
-    display: flex;
-    gap: 8px;
-    padding-bottom: 8px;
-  }
-
-  .settings-sidebar button {
-    flex: 0 0 auto;
-  }
-
-  .nearby-profile-modal {
-    width: 100%;
-    max-height: calc(100dvh - 20px);
-    border-radius: 20px;
-  }
-
-  .nearby-profile-actions {
-    flex-direction: column;
-  }
-
-  .nearby-profile-actions button {
-    width: 100%;
-  }
-}
-
-
-/* =========================================================
-   PHONE
-   <= 575
-   ========================================================= */
-
-@media (max-width: 575px) {
-  body {
-    font-size: 14px;
-  }
-
-  .dashboard-main,
-  .dashboard-content,
-  .dashboard-container {
-    padding-left: 10px;
-    padding-right: 10px;
-  }
-
-  .dashboard-topbar {
-    padding-left: 10px;
-    padding-right: 10px;
-  }
-
-  .dashboard-brand-mark {
-    width: 34px;
-    height: 34px;
-  }
-
-  .people-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .person-card {
-    min-height: 0;
-  }
-
-  .person-card-top {
-    align-items: center;
-  }
-
-  .person-card h3 {
-    font-size: 16px;
-  }
+  /* -------------------------------------------------------
+     SECTION HEADINGS
+     ------------------------------------------------------- */
 
   .section-heading {
-    align-items: flex-start;
-    flex-wrap: wrap;
+    width: 100% !important;
+
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: space-between !important;
+
+    gap: 12px !important;
   }
 
-  .radius-selector,
-  .radius-options {
-    width: 100%;
+  .section-heading h2 {
+    font-size: 28px !important;
+    line-height: 1.1 !important;
   }
 
-  .radius-selector button,
-  .radius-options button {
-    flex: 1 1 0;
-    min-width: 0;
+  /* -------------------------------------------------------
+     PEOPLE GRID
+     ------------------------------------------------------- */
+
+  .people-grid {
+    width: 100% !important;
+
+    display: grid !important;
+
+    grid-template-columns:
+      1fr !important;
+
+    gap: 12px !important;
+  }
+
+  .person-card {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  /* -------------------------------------------------------
+     REQUESTS
+     ------------------------------------------------------- */
+
+  .requests-list {
+    width: 100% !important;
   }
 
   .request-card {
-    display: grid;
-    grid-template-columns: 48px minmax(0, 1fr);
-    gap: 10px;
+    width: 100% !important;
+
+    display: grid !important;
+    grid-template-columns:
+      auto minmax(0, 1fr) !important;
+
+    gap: 12px !important;
   }
 
-  .request-card .request-actions,
-  .request-card .friend-actions {
-    grid-column: 1 / -1;
-    width: 100%;
+  /* -------------------------------------------------------
+     GENERAL MOBILE SAFETY
+     ------------------------------------------------------- */
+
+  button,
+  input,
+  textarea,
+  select {
+    max-width: 100%;
   }
 
-  .friend-actions {
-    width: 100%;
-  }
-
-  .friend-message-button {
-    flex: 1;
-  }
-
-  .friend-more-button {
-    width: 44px;
-    flex: 0 0 44px;
-  }
-
-  .friend-action-menu {
-    right: 0;
-    bottom: calc(100% + 6px);
-    width: min(190px, calc(100vw - 28px));
-  }
-
-  .nearby-profile-overlay {
-    align-items: flex-end;
-    padding: 0;
-  }
-
-  .nearby-profile-modal {
-    width: 100%;
-    max-width: none;
-    max-height: 94dvh;
-    border-radius: 22px 22px 0 0;
-  }
-
-  .nearby-profile-header {
-    height: 120px;
-  }
-
-  .nearby-profile-avatar {
-    width: 92px;
-    height: 92px;
-    transform: translateY(38px);
-  }
-
-  .nearby-profile-body {
-    padding: 56px 16px 18px;
-  }
-
-  .nearby-profile-title {
-    flex-direction: column;
-  }
-
-  .nearby-profile-title h2 {
-    font-size: 22px;
-  }
-
-  .notification-card {
-    display: grid;
-    grid-template-columns: 42px minmax(0, 1fr) 40px;
-  }
-
-  .notification-content {
-    min-width: 0;
-  }
-
-  .notification-title-row {
-    min-width: 0;
-  }
-
-  .notification-title-row h3 {
+  p,
+  h1,
+  h2,
+  h3,
+  span {
     overflow-wrap: anywhere;
-  }
-
-  .login-navbar,
-  .register-navbar {
-    min-height: 58px;
-    padding: 8px 12px;
-  }
-
-  .login-nav-right span,
-  .register-nav-right span {
-    display: none;
-  }
-
-  .login-main,
-  .register-main {
-    padding: 12px;
-  }
-
-  .login-card,
-  .register-card {
-    width: 100%;
-  }
-
-  .login-intro,
-  .register-intro {
-    padding: 20px;
-  }
-
-  .login-form,
-  .register-form {
-    padding: 20px;
   }
 }
 
 
 /* =========================================================
    VERY SMALL PHONES
-   <= 390
    ========================================================= */
 
 @media (max-width: 390px) {
+
+  .dashboard-topbar {
+    padding:
+      8px !important;
+  }
+
+  .dashboard-user-actions {
+    gap: 4px !important;
+  }
+
   .dashboard-nav-button,
   .dashboard-messages-button,
   .dashboard-notifications-button,
+  .dashboard-settings-button,
+  .dashboard-logout,
   .dashboard-user-button {
-    width: 40px;
-    min-width: 40px;
+    flex-basis: 40px !important;
+    width: 40px !important;
+    min-width: 40px !important;
+    height: 40px !important;
   }
 
-  .dashboard-nav-button::first-letter,
-  .dashboard-messages-button::first-letter,
-  .dashboard-notifications-button::first-letter {
-    font-size: 17px;
+  .dashboard-brand-mark {
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
   }
 
-  .people-grid {
-    gap: 8px;
+  .dashboard-page {
+    padding: 7px !important;
   }
 
-  .person-card {
-    padding: 10px;
+  .dashboard-welcome {
+    min-height: 320px !important;
+    padding: 25px 18px !important;
+    border-radius: 20px !important;
   }
 
-  .person-avatar {
-    width: 52px;
-    height: 52px;
+  .dashboard-welcome h1 {
+    font-size: 39px !important;
   }
 
-  .nearby-profile-body {
-    padding-left: 14px;
-    padding-right: 14px;
+  .profile-avatar {
+    width: 60px !important;
+    height: 60px !important;
+    min-width: 60px !important;
   }
 
-  .notification-card {
-    grid-template-columns: 38px minmax(0, 1fr) 38px;
-    gap: 8px;
-    padding: 10px;
-  }
-
-  .notification-icon {
-    width: 38px;
-    height: 38px;
-  }
-
-  .notification-open {
-    min-width: 38px;
+  .profile-content h2 {
+    font-size: 19px !important;
   }
 }
 
 
 /* =========================================================
-   MOBILE LANDSCAPE
+   MOBILE CHAT
    ========================================================= */
 
-@media (max-width: 767px) and (orientation: landscape) {
-  .nearby-profile-modal {
-    max-height: 96dvh;
+@media (max-width: 767px) {
+
+  .messages-page {
+    width: 100% !important;
+    height: 100dvh !important;
+
+    overflow: hidden !important;
   }
 
   .messages-layout {
-    height: calc(100dvh - 54px);
+    width: 100% !important;
+    height: 100% !important;
+
+    display: block !important;
   }
 
-  .nearby-profile-header {
-    height: 95px;
+  .messages-sidebar {
+    width: 100% !important;
+    max-width: 100% !important;
   }
 
-  .nearby-profile-avatar {
-    width: 76px;
-    height: 76px;
-    transform: translateY(30px);
+  .messages-chat {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100% !important;
   }
 
-  .nearby-profile-body {
-    padding-top: 44px;
-  }
-}
-
-
-/* =========================================================
-   REDUCE MOTION
-   ========================================================= */
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    scroll-behavior: auto !important;
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
 }
