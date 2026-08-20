@@ -14,8 +14,15 @@ export default function Login() {
   });
 
   const [showPassword, setShowPassword] = useState(false);
+
   const [loading, setLoading] = useState(false);
+
   const [error, setError] = useState("");
+
+
+  // =========================================
+  // INPUT CHANGE
+  // =========================================
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -28,6 +35,11 @@ export default function Login() {
     setError("");
   };
 
+
+  // =========================================
+  // LOGIN
+  // =========================================
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -35,6 +47,11 @@ export default function Login() {
 
     const username = formData.username.trim();
     const password = formData.password;
+
+
+    // -----------------------------------------
+    // VALIDATION
+    // -----------------------------------------
 
     if (!username) {
       setError("Please enter your username.");
@@ -46,51 +63,74 @@ export default function Login() {
       return;
     }
 
+
     try {
       setLoading(true);
 
-      console.log("Connecting to:", `${API}/api/auth/login`);
 
-      const response = await fetch(`${API}/api/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username,
-          password,
-        }),
-      });
+      // -----------------------------------------
+      // LOGIN REQUEST
+      // -----------------------------------------
 
-      let data = {};
+      const response = await fetch(
+        `${API}/api/auth/login`,
+        {
+          method: "POST",
 
-      try {
-        data = await response.json();
-      } catch {
-        data = {};
-      }
+          headers: {
+            "Content-Type": "application/json",
+          },
 
-      console.log("Login status:", response.status);
+          body: JSON.stringify({
+            username,
+            password,
+          }),
+        }
+      );
+
+
+      const data = await response.json();
+
       console.log("Login response:", data);
+
+
+      // -----------------------------------------
+      // LOGIN ERROR
+      // -----------------------------------------
 
       if (!response.ok) {
         throw new Error(
           data.error ||
-            data.message ||
-            `Login failed (${response.status}).`
+          data.message ||
+          "Invalid username or password."
         );
       }
 
+
+      // -----------------------------------------
+      // TOKEN
+      // -----------------------------------------
+
       if (!data.token) {
         throw new Error(
-          "Login succeeded, but authentication token was not received."
+          "Login successful, but authentication token was not received."
         );
       }
+
+
+      // -----------------------------------------
+      // SAVE TOKEN
+      // -----------------------------------------
 
       localStorage.setItem(
         "nearconnect_token",
         data.token
       );
+
+
+      // -----------------------------------------
+      // SAVE USER
+      // -----------------------------------------
 
       if (data.user) {
         localStorage.setItem(
@@ -99,39 +139,53 @@ export default function Login() {
         );
       }
 
-      console.log("NearConnect authentication saved.");
+
+      console.log(
+        "NearConnect authentication saved."
+      );
+
+
+      // -----------------------------------------
+      // DASHBOARD
+      // -----------------------------------------
 
       navigate("/dashboard");
-    } catch (err) {
-      console.error("Login error:", err);
 
-      if (
-        err instanceof TypeError &&
-        err.message.toLowerCase().includes("fetch")
-      ) {
-        setError(
-          "Unable to reach NearConnect server. Please try again."
-        );
-      } else {
-        setError(
-          err.message ||
-            "Unable to login. Please try again."
-        );
-      }
+
+    } catch (err) {
+
+      console.error(
+        "Login error:",
+        err
+      );
+
+      setError(
+        err.message ||
+        "Unable to login. Please try again."
+      );
+
     } finally {
+
       setLoading(false);
+
     }
   };
+
 
   return (
     <div className="login-page">
 
-      {/* NAVBAR */}
+      {/* =====================================
+          NAVBAR
+      ===================================== */}
+
       <header className="login-navbar">
+
         <Link
           to="/"
           className="login-brand"
         >
+
           <span className="login-brand-mark">
             N
           </span>
@@ -139,9 +193,12 @@ export default function Login() {
           <span className="login-brand-name">
             NearConnect
           </span>
+
         </Link>
 
+
         <div className="login-nav-right">
+
           <span>
             Don't have an account?
           </span>
@@ -149,30 +206,46 @@ export default function Login() {
           <Link to="/register">
             Get started
           </Link>
+
         </div>
+
       </header>
 
-      {/* MAIN */}
+
+      {/* =====================================
+          MAIN
+      ===================================== */}
+
       <main className="login-main">
 
         <section className="login-card">
 
-          {/* LEFT SIDE */}
+
+          {/* =================================
+              LEFT SIDE
+          ================================= */}
+
           <section className="login-intro">
 
             <div className="login-location-label">
+
               <span className="login-live-dot"></span>
 
               <span>
                 YOUR NEARBY NETWORK
               </span>
+
             </div>
+
 
             <h1>
               Meet people
               <br />
-              <span>closer to you.</span>
+              <span>
+                closer to you.
+              </span>
             </h1>
+
 
             <p className="login-description">
               Sign in to discover people
@@ -180,21 +253,33 @@ export default function Login() {
               distance, and shared interests.
             </p>
 
+
             {/* NETWORK VISUAL */}
+
             <div className="login-visual">
 
               <div className="login-grid"></div>
 
               <div className="login-circle login-circle-one"></div>
+
               <div className="login-circle login-circle-two"></div>
+
               <div className="login-circle login-circle-three"></div>
 
+
               <div className="login-connection login-connection-one"></div>
+
               <div className="login-connection login-connection-two"></div>
 
+
               <div className="login-center">
-                <span>📍</span>
+
+                <span>
+                  📍
+                </span>
+
               </div>
+
 
               <div className="login-person login-person-one">
                 👨🏻
@@ -209,10 +294,16 @@ export default function Login() {
               </div>
 
             </div>
+
           </section>
 
-          {/* RIGHT SIDE */}
+
+          {/* =================================
+              RIGHT SIDE
+          ================================= */}
+
           <section className="login-form-section">
+
 
             <div className="login-form-header">
 
@@ -231,9 +322,13 @@ export default function Login() {
 
             </div>
 
+
             {/* ERROR */}
+
             {error && (
+
               <div className="login-message login-error">
+
                 <span className="message-icon">
                   !
                 </span>
@@ -241,21 +336,28 @@ export default function Login() {
                 <span>
                   {error}
                 </span>
+
               </div>
+
             )}
 
+
             {/* FORM */}
+
             <form
               className="login-form"
               onSubmit={handleSubmit}
             >
 
+
               {/* USERNAME */}
+
               <div className="login-field">
 
                 <label htmlFor="username">
                   Username
                 </label>
+
 
                 <div className="login-input-wrapper">
 
@@ -278,7 +380,9 @@ export default function Login() {
 
               </div>
 
+
               {/* PASSWORD */}
+
               <div className="login-field">
 
                 <div className="login-label-row">
@@ -302,6 +406,7 @@ export default function Login() {
                   </button>
 
                 </div>
+
 
                 <div className="login-input-wrapper">
 
@@ -328,7 +433,9 @@ export default function Login() {
 
               </div>
 
+
               {/* SUBMIT */}
+
               <button
                 type="submit"
                 className="login-submit"
@@ -336,11 +443,14 @@ export default function Login() {
               >
 
                 {loading ? (
+
                   <>
                     <span className="login-spinner"></span>
                     Signing in
                   </>
+
                 ) : (
+
                   <>
                     Sign in
 
@@ -348,13 +458,17 @@ export default function Login() {
                       →
                     </span>
                   </>
+
                 )}
 
               </button>
 
+
             </form>
 
+
             {/* REGISTER */}
+
             <div className="login-register">
 
               <span>
@@ -367,7 +481,9 @@ export default function Login() {
 
             </div>
 
+
             {/* PRIVACY */}
+
             <div className="login-privacy">
 
               <div className="privacy-check">
@@ -389,15 +505,18 @@ export default function Login() {
 
             </div>
 
+
           </section>
 
         </section>
+
 
         <div className="login-copyright">
           © 2026 NearConnect
         </div>
 
       </main>
+
     </div>
   );
 }
