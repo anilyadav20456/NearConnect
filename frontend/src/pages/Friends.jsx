@@ -51,9 +51,6 @@ export default function Friends() {
   const [success, setSuccess] =
     useState("");
 
-  const [openMenuId, setOpenMenuId] =
-    useState(null);
-
   // Report modal
   const [reportUser, setReportUser] =
     useState(null);
@@ -66,6 +63,9 @@ export default function Friends() {
 
   const [reportLoading, setReportLoading] =
     useState(false);
+
+  const [openActionMenuId, setOpenActionMenuId] =
+    useState(null);
 
 
   // =====================================================
@@ -275,31 +275,6 @@ export default function Friends() {
       setSuccess("");
 
     };
-
-
-  // =====================================================
-  // CLOSE FRIEND ACTION MENU WHEN CLICKING OUTSIDE
-  // =====================================================
-
-  useEffect(() => {
-
-    const closeMenu = () => {
-      setOpenMenuId(null);
-    };
-
-    document.addEventListener(
-      "click",
-      closeMenu
-    );
-
-    return () => {
-      document.removeEventListener(
-        "click",
-        closeMenu
-      );
-    };
-
-  }, []);
 
 
   // =====================================================
@@ -1440,74 +1415,75 @@ export default function Friends() {
                         </button>
 
 
-                        <div className="friend-menu-wrap">
+                        <div className="friend-more-wrap">
 
                           <button
                             type="button"
                             className="friend-more-button"
+                            aria-label={`Actions for ${
+                              friend.name ||
+                              friend.username
+                            }`}
                             onClick={(event) => {
-
                               event.stopPropagation();
 
-                              setOpenMenuId(
-                                openMenuId === friend.id
-                                  ? null
-                                  : friend.id
+                              setOpenActionMenuId(
+                                previous =>
+                                  previous === friend.id
+                                    ? null
+                                    : friend.id
                               );
-
                             }}
-                            disabled={
-                              busyUserId ===
-                              friend.id
-                            }
-                            aria-label="Friend actions"
-                            aria-expanded={
-                              openMenuId === friend.id
-                            }
                           >
                             ⋯
                           </button>
 
 
-                          {openMenuId === friend.id && (
+                          {openActionMenuId === friend.id && (
 
                             <div
                               className="friend-action-menu"
-                              onClick={(event) =>
+                              onClick={event =>
                                 event.stopPropagation()
                               }
                             >
 
                               <button
                                 type="button"
+                                className="friend-action-item"
                                 onClick={() => {
-                                  setOpenMenuId(null);
+                                  setOpenActionMenuId(null);
                                   removeFriend(friend);
                                 }}
                               >
-                                👤 Remove friend
+                                <span>🗑️</span>
+                                <span>Remove friend</span>
                               </button>
 
 
                               <button
                                 type="button"
+                                className="friend-action-item"
                                 onClick={() => {
-                                  setOpenMenuId(null);
+                                  setOpenActionMenuId(null);
                                   blockUser(friend);
                                 }}
                               >
-                                🚫 Block
+                                <span>🚫</span>
+                                <span>Block</span>
                               </button>
 
 
                               <button
                                 type="button"
+                                className="friend-action-item report"
                                 onClick={() => {
-                                  setOpenMenuId(null);
+                                  setOpenActionMenuId(null);
                                   openReport(friend);
                                 }}
                               >
-                                ⚠️ Report
+                                <span>⚑</span>
+                                <span>Report</span>
                               </button>
 
                             </div>

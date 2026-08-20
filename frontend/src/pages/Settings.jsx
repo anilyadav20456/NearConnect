@@ -16,7 +16,6 @@ import {
   useLanguage
 } from "../i18n/LanguageContext";
 
-import "./Settings.css";
 
 
 export default function Settings() {

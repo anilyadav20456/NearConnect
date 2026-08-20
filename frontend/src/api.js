@@ -1,3 +1,4 @@
+import "./App.css";
 const API = "https://nearconnect-backend-cavd.onrender.com";
 
 

@@ -1396,6 +1396,40 @@ export default function Dashboard() {
 
 
   // =======================================================
+  // RADIUS FILTER
+  // =======================================================
+  // Only show people whose actual distance is within
+  // the selected radius.
+  const visibleNearbyPeople =
+    nearbyPeople.filter((person) => {
+      const distance =
+        parseFloat(person.distance);
+
+      if (Number.isNaN(distance)) {
+        return false;
+      }
+
+      // Separate, non-overlapping ranges:
+      // 2 km -> 0 to 2 km
+      // 4 km -> above 2 to 4 km
+      // 5 km -> above 4 to 5 km
+      if (Number(radius) === 2) {
+        return distance >= 0 && distance <= 2;
+      }
+
+      if (Number(radius) === 4) {
+        return distance > 2 && distance <= 4;
+      }
+
+      if (Number(radius) === 5) {
+        return distance > 4 && distance <= 5;
+      }
+
+      return false;
+    });
+
+
+  // =======================================================
   // RENDER
   // =======================================================
 
@@ -1967,7 +2001,7 @@ export default function Dashboard() {
               {
                 nearbyLoading
                   ? "Updating..."
-                  : `${nearbyPeople.length} people`
+                  : `${visibleNearbyPeople.length} people`
               }
             </span>
 
@@ -1984,7 +2018,7 @@ export default function Dashboard() {
 
             </div>
 
-          ) : nearbyPeople.length === 0 ? (
+          ) : visibleNearbyPeople.length === 0 ? (
 
             <div className="empty-state">
 
@@ -2007,7 +2041,7 @@ export default function Dashboard() {
 
             <div className="people-grid">
 
-              {nearbyPeople.map(
+              {visibleNearbyPeople.map(
                 person => (
 
                   <article

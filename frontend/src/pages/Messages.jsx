@@ -20,7 +20,7 @@ import "./Messages.css";
 
 
 const API =
-  "https://nearconnect-backend-cavd.onrender.com";
+  "http://127.0.0.1:5001";
 
 
 const getProfileImageUrl = (image) => {
@@ -592,7 +592,6 @@ export default function Messages() {
           socket.emit(
             "join_room",
             {
-              token,
               friend_id:
                 Number(
                   selectedFriendId
@@ -629,7 +628,6 @@ export default function Messages() {
           socket.emit(
             "join_room",
             {
-              token,
               friend_id:
                 Number(
                   selectedFriendId
@@ -1154,7 +1152,6 @@ export default function Messages() {
         socket.emit(
           "leave_room",
           {
-            token,
             friend_id:
               Number(
                 selectedFriendId
@@ -1250,38 +1247,47 @@ export default function Messages() {
         );
 
 
-      const tempMessage = {
-
-        id:
-          `temp-${Date.now()}-${Math.random()}`,
-
-        sender_id:
-          myId,
-
-        receiver_id:
-          receiverId,
-
-        content,
-
-        is_read:
-          false,
-
-        created_at:
-          new Date().toISOString(),
-
-        optimistic:
-          true
-
-      };
-
-
       try {
 
         setSending(true);
+
         setError("");
 
 
-        // Show immediately in the sender UI.
+        // =================================================
+        // OPTIMISTIC MESSAGE
+        //
+        // THIS MAKES THE MESSAGE APPEAR
+        // IMMEDIATELY WITHOUT REFRESH.
+        // =================================================
+
+        const tempMessage = {
+
+          id:
+            `temp-${Date.now()}-${Math.random()}`,
+
+          sender_id:
+            myId,
+
+          receiver_id:
+            receiverId,
+
+          content:
+
+            content,
+
+          is_read:
+            false,
+
+          created_at:
+            new Date().toISOString(),
+
+          optimistic:
+            true
+
+        };
+
+
         setMessages(
           previous => [
             ...previous,
@@ -1289,96 +1295,239 @@ export default function Messages() {
           ]
         );
 
+
         setText("");
+
         scrollToBottom();
 
 
-        // IMPORTANT:
-        // Use REST POST as the source of truth for sending.
-        // The Flask endpoint saves the message and then emits
-        // Socket.IO events to the recipient immediately.
-        const data =
-          await apiFetch(
-            "/api/messages",
-            {
-              method:
-                "POST",
-
-              body:
-                JSON.stringify({
-                  receiver_id:
-                    receiverId,
-
-                  content
-                })
-            }
-          );
-
-
-        const serverMessage =
-          data?.message ||
-          data?.message_data ||
-          data?.data;
-
+        // =================================================
+        // SOCKET SEND
+        // =================================================
 
         if (
-          serverMessage &&
-          typeof serverMessage === "object"
+          socketRef.current &&
+          socketRef.current.connected
         ) {
 
-          setMessages(
-            previous => {
+          socketRef.current.emit(
+            "send_message",
 
-              const exists =
-                previous.some(
-                  message =>
-                    Number(message.id) ===
-                    Number(serverMessage.id)
+            {
+              receiver_id:
+                receiverId,
+
+              content:
+                content
+            },
+
+            response => {
+
+              console.log(
+                "SOCKET MESSAGE RESPONSE:",
+                response
+              );
+
+
+              // -------------------------------------------
+              // SOCKET ERROR
+              // -------------------------------------------
+
+              if (
+                response &&
+                response.success === false
+              ) {
+
+                setMessages(
+                  previous =>
+                    previous.filter(
+                      message =>
+                        message.id !==
+                        tempMessage.id
+                    )
                 );
 
 
-              if (exists) {
-                return previous;
+                setError(
+                  response.error ||
+                  response.message ||
+                  "Message could not be sent."
+                );
+
+
+                setText(
+                  content
+                );
+
+
+                return;
+
               }
 
 
-              return previous.map(
-                message =>
-                  message.id ===
-                  tempMessage.id
-                    ? serverMessage
-                    : message
-              );
+              // -------------------------------------------
+              // SERVER MAY RETURN CREATED MESSAGE
+              // -------------------------------------------
+
+              const serverMessage =
+                response?.message ||
+                response?.data;
+
+
+              if (serverMessage) {
+
+                setMessages(
+                  previous => {
+
+                    const alreadyExists =
+                      previous.some(
+                        message =>
+                          Number(
+                            message.id
+                          ) ===
+                          Number(
+                            serverMessage.id
+                          )
+                      );
+
+
+                    if (
+                      alreadyExists
+                    ) {
+
+                      return previous;
+
+                    }
+
+
+                    return previous.map(
+                      message =>
+
+                        message.id ===
+                        tempMessage.id
+                          ? serverMessage
+                          : message
+
+                    );
+
+                  }
+                );
+
+
+                scrollToBottom();
+
+              }
 
             }
           );
 
+
         } else {
 
-          // If the API succeeds but does not return
-          // the created message, remove the optimistic
-          // copy and reload the conversation from DB.
-          setMessages(
-            previous =>
-              previous.filter(
-                message =>
-                  message.id !==
-                  tempMessage.id
-              )
-          );
+          // =================================================
+          // REST FALLBACK
+          // =================================================
+
+          const data =
+            await apiFetch(
+              "/api/messages",
+              {
+                method: "POST",
+
+                body:
+                  JSON.stringify({
+
+                    receiver_id:
+                      receiverId,
+
+                    content:
+                      content
+
+                  })
+
+              }
+            );
 
 
-          await loadConversation(
-            receiverId
-          );
+          const serverMessage =
+            data.message_data ||
+            data.data ||
+            data.message;
+
+
+          if (
+            serverMessage &&
+            typeof serverMessage ===
+            "object"
+          ) {
+
+            setMessages(
+              previous => {
+
+                const exists =
+                  previous.some(
+                    message =>
+                      Number(
+                        message.id
+                      ) ===
+                      Number(
+                        serverMessage.id
+                      )
+                  );
+
+
+                if (exists) {
+
+                  return previous;
+
+                }
+
+
+                return previous.map(
+                  message =>
+
+                    message.id ===
+                    tempMessage.id
+                      ? serverMessage
+                      : message
+
+                );
+
+              }
+            );
+
+          }
+
+          scrollToBottom();
 
         }
 
 
-        // Update the conversation preview.
+        // =================================================
+        // UPDATE CONVERSATION PREVIEW
+        // =================================================
+
         setConversations(
-          previous =>
-            previous.map(
+          previous => {
+
+            const found =
+              previous.some(
+                conversation =>
+                  Number(
+                    conversation.id
+                  ) ===
+                  receiverId
+              );
+
+
+            if (!found) {
+
+              return previous;
+
+            }
+
+
+            return previous.map(
               conversation => {
 
                 if (
@@ -1401,10 +1550,7 @@ export default function Messages() {
                     content,
 
                   last_message_at:
-                    (
-                      serverMessage?.created_at ||
-                      new Date().toISOString()
-                    ),
+                    new Date().toISOString(),
 
                   unread_count:
                     0
@@ -1412,11 +1558,10 @@ export default function Messages() {
                 };
 
               }
-            )
+            );
+
+          }
         );
-
-
-        scrollToBottom();
 
 
       } catch (err) {
@@ -1427,13 +1572,15 @@ export default function Messages() {
         );
 
 
-        // Remove failed optimistic message.
         setMessages(
           previous =>
             previous.filter(
               message =>
-                message.id !==
-                tempMessage.id
+                !(
+                  message.optimistic &&
+                  message.content ===
+                  content
+                )
             )
         );
 
@@ -1487,7 +1634,6 @@ export default function Messages() {
       socketRef.current.emit(
         "typing",
         {
-          token,
           friend_id:
             Number(
               selectedFriendId
@@ -1513,7 +1659,6 @@ export default function Messages() {
               socketRef.current.emit(
                 "stop_typing",
                 {
-                  token,
                   friend_id:
                     Number(
                       selectedFriendId

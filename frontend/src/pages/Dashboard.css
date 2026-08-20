@@ -2247,3 +2247,383 @@
     0 3px 10px
     rgba(239, 68, 68, 0.3);
 }
+/* =========================================================
+   MOBILE DASHBOARD NAVBAR ONLY
+   Existing desktop design remains unchanged.
+   ========================================================= */
+
+@media (max-width: 767px) {
+
+  .dashboard-topbar {
+    width: 100%;
+    min-height: 62px;
+
+    padding: 8px 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 8px;
+
+    overflow: hidden;
+  }
+
+  /* NearConnect logo */
+  .dashboard-brand {
+    width: 42px;
+    min-width: 42px;
+
+    height: 42px;
+
+    padding: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+  }
+
+  .dashboard-brand > span {
+    display: none;
+  }
+
+  .dashboard-brand-mark {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+  }
+
+  /* Right navigation */
+  .dashboard-user-actions {
+    flex: 1;
+    min-width: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: 6px;
+
+    overflow: hidden;
+  }
+
+  /* Profile / Friends / Messages / Notifications / Settings / Logout */
+  .dashboard-user-button,
+  .dashboard-nav-button,
+  .dashboard-messages-button,
+  .dashboard-notifications-button,
+  .dashboard-settings-button,
+  .dashboard-logout {
+    width: 42px;
+    min-width: 42px;
+
+    height: 42px;
+    min-height: 42px;
+
+    padding: 0;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    font-size: 0;
+  }
+
+  /* Profile */
+  .dashboard-user-button {
+    font-size: 0;
+  }
+
+  .dashboard-user-button strong {
+    display: none;
+  }
+
+  .dashboard-avatar {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+  }
+
+  /* Friends */
+  .dashboard-nav-button::before {
+    content: "👥";
+    font-size: 18px;
+  }
+
+  /* Messages */
+  .dashboard-messages-button::before {
+    content: "💬";
+    font-size: 18px;
+  }
+
+  /* Notifications */
+  .dashboard-notifications-button::before {
+    content: "🔔";
+    font-size: 18px;
+  }
+
+  /* Settings */
+  .dashboard-settings-button::before {
+    content: "⚙️";
+    font-size: 18px;
+  }
+
+  /* Logout */
+  .dashboard-logout::before {
+    content: "↪";
+    font-size: 20px;
+  }
+
+  /* Preserve notification counters */
+  .dashboard-unread-badge,
+  .dashboard-notification-badge {
+    top: -4px;
+    right: -4px;
+
+    min-width: 18px;
+    height: 18px;
+
+    padding: 0 4px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 9px;
+  }
+}
+
+
+/* Small phones */
+@media (max-width: 390px) {
+
+  .dashboard-topbar {
+    padding: 7px 7px;
+    gap: 5px;
+  }
+
+  .dashboard-user-actions {
+    gap: 4px;
+  }
+
+  .dashboard-brand,
+  .dashboard-user-button,
+  .dashboard-nav-button,
+  .dashboard-messages-button,
+  .dashboard-notifications-button,
+  .dashboard-settings-button,
+  .dashboard-logout {
+    width: 38px;
+    min-width: 38px;
+
+    height: 38px;
+    min-height: 38px;
+  }
+
+  .dashboard-brand-mark {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+  }
+
+  .dashboard-avatar {
+    width: 29px;
+    height: 29px;
+    min-width: 29px;
+  }
+
+  .dashboard-nav-button::before,
+  .dashboard-messages-button::before,
+  .dashboard-notifications-button::before,
+  .dashboard-settings-button::before {
+    font-size: 16px;
+  }
+
+  .dashboard-logout::before {
+    font-size: 18px;
+  }
+}
+
+/* =========================================================
+   MOBILE BOTTOM NAV
+   Hidden on desktop
+   ========================================================= */
+
+.mobile-bottom-nav {
+  display: none;
+}
+
+
+/* =========================================================
+   MOBILE ONLY
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+  .mobile-bottom-nav {
+    position: fixed;
+
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+
+    z-index: 9999;
+
+    height: 68px;
+
+    padding: 6px;
+
+    display: grid;
+
+    grid-template-columns: repeat(5, 1fr);
+
+    gap: 4px;
+
+    align-items: stretch;
+
+    background: rgba(255, 255, 255, 0.97);
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 20px;
+
+    box-shadow:
+      0 10px 30px rgba(15, 23, 42, 0.15);
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
+  .mobile-bottom-nav button {
+    position: relative;
+
+    width: 100%;
+    height: 100%;
+
+    padding: 4px 2px;
+
+    border: 0;
+
+    border-radius: 14px;
+
+    background: transparent;
+
+    color: #64748b;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 4px;
+
+    font-family: inherit;
+
+    cursor: pointer;
+
+    font-size: 12px;
+  }
+
+  .mobile-bottom-nav button span {
+    width: 24px;
+    height: 24px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 19px;
+
+    line-height: 1;
+  }
+
+  .mobile-bottom-nav button small {
+    display: block;
+
+    font-size: 9px;
+
+    line-height: 1;
+
+    font-weight: 800;
+
+    white-space: nowrap;
+  }
+
+  .mobile-bottom-nav button:first-child {
+    background: #111827;
+
+    color: #ffffff;
+  }
+
+  .mobile-bottom-nav button:active {
+    transform: scale(0.97);
+  }
+
+  /* Notification badges */
+  .mobile-nav-badge {
+    position: absolute;
+
+    top: 3px;
+    right: 12%;
+
+    min-width: 17px;
+    height: 17px;
+
+    padding: 0 4px;
+
+    display: flex !important;
+
+    align-items: center;
+    justify-content: center;
+
+    border: 2px solid #ffffff;
+
+    border-radius: 50px;
+
+    background: #ef4444;
+
+    color: #ffffff;
+
+    font-size: 8px;
+
+    font-weight: 900;
+
+    line-height: 1;
+  }
+}
+
+
+/* =========================================================
+   SMALL PHONES
+   ========================================================= */
+
+@media (max-width: 390px) {
+
+  .mobile-bottom-nav {
+    left: 7px;
+    right: 7px;
+    bottom: 7px;
+
+    height: 62px;
+
+    border-radius: 18px;
+  }
+
+  .mobile-bottom-nav button span {
+    font-size: 17px;
+  }
+
+  .mobile-bottom-nav button small {
+    font-size: 8px;
+  }
+}

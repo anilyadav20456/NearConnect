@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+
 import "./Register.css";
+
 
 const API = "https://nearconnect-backend-cavd.onrender.com";
 
