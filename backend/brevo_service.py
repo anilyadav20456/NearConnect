@@ -19,7 +19,7 @@ if os.path.exists(env_path):
 
 BREVO_API_KEY = os.environ.get("BREVO_API_KEY", "")
 BREVO_SENDER_NAME = os.environ.get("BREVO_SENDER_NAME", "NearConnect")
-BREVO_SENDER_EMAIL = os.environ.get("BREVO_SENDER_EMAIL", "noreply@nearconnect.com")
+BREVO_SENDER_EMAIL = os.environ.get("BREVO_SENDER_EMAIL", "havenspace.marketplace@gmail.com")
 
 BREVO_API_URL = "https://api.brevo.com/v3/smtp/email"
 BREVO_ACCOUNT_URL = "https://api.brevo.com/v3/account"
