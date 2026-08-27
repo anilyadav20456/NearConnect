@@ -44,6 +44,16 @@ class User(db.Model):
         nullable=False
     )
 
+    reset_otp = db.Column(
+        db.String(6),
+        nullable=True
+    )
+
+    reset_otp_expires = db.Column(
+        db.DateTime,
+        nullable=True
+    )
+
     # =====================================================
     # PROFILE
     # =====================================================
@@ -226,6 +236,24 @@ class Message(db.Model):
         db.Boolean,
         default=False,
         nullable=False
+    )
+
+    is_edited = db.Column(
+        db.Boolean,
+        default=False,
+        nullable=True
+    )
+
+    is_deleted = db.Column(
+        db.Boolean,
+        default=False,
+        nullable=True
+    )
+
+    is_pinned = db.Column(
+        db.Boolean,
+        default=False,
+        nullable=True
     )
 
     created_at = db.Column(

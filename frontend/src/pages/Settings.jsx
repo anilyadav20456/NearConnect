@@ -16,6 +16,8 @@ import {
   useLanguage
 } from "../i18n/LanguageContext";
 
+import "./Settings.css";
+
 
 
 export default function Settings() {
@@ -84,6 +86,10 @@ export default function Settings() {
   const [changingPassword, setChangingPassword] =
     useState(false);
 
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
 
   // =====================================================
   // AUTH
@@ -103,6 +109,7 @@ export default function Settings() {
 
     loadSettings();
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token, navigate]);
 
 
@@ -800,8 +807,11 @@ export default function Settings() {
 
 
                   <span>
-                    @{profile?.username ||
-                      "username"}
+                    {profile?.username
+                      ? (profile.username.startsWith("@")
+                          ? profile.username
+                          : `@${profile.username}`)
+                      : "@username"}
                   </span>
 
 
@@ -1177,7 +1187,7 @@ export default function Settings() {
 
             <section
               id="security"
-              className="settings-card"
+              className="settings-card settings-security-card"
             >
 
               <div className="settings-card-heading">
@@ -1200,92 +1210,117 @@ export default function Settings() {
 
               </div>
 
-
-              <form
-                className="password-form"
-                onSubmit={
-                  handlePasswordChange
-                }
-              >
-
-                <div className="password-field">
-
-                  <label>
-                    {t("settings.currentPassword")}
-                  </label>
-
-                  <input
-                    type="password"
-                    value={currentPassword}
-                    onChange={event =>
-                      setCurrentPassword(
-                        event.target.value
-                      )
-                    }
-                  />
-
+              <div className="settings-black-box">
+                <div className="settings-black-box-header">
+                  <span className="settings-black-box-badge">🔒 256-Bit Encrypted</span>
+                  <h4>Password & Credentials</h4>
+                  <p>Update your password to ensure maximum security for your account.</p>
                 </div>
 
-
-                <div className="password-field">
-
-                  <label>
-                    {t("settings.newPassword")}
-                  </label>
-
-                  <input
-                    type="password"
-                    value={newPassword}
-                    onChange={event =>
-                      setNewPassword(
-                        event.target.value
-                      )
-                    }
-                    minLength={6}
-                  />
-
-                  <small>
-                    {t("settings.minimumPassword")}
-                  </small>
-
-                </div>
-
-
-                <div className="password-field">
-
-                  <label>
-                    {t("settings.confirmPassword")}
-                  </label>
-
-                  <input
-                    type="password"
-                    value={confirmPassword}
-                    onChange={event =>
-                      setConfirmPassword(
-                        event.target.value
-                      )
-                    }
-                    minLength={6}
-                  />
-
-                </div>
-
-
-                <button
-                  type="submit"
-                  className="password-button"
-                  disabled={
-                    changingPassword
-                  }
+                <form
+                  className="password-form"
+                  onSubmit={handlePasswordChange}
                 >
 
-                  {changingPassword
-                    ? t("settings.changingPassword")
-                    : t("settings.changePasswordButton")}
+                  <div className="password-field">
 
-                </button>
+                    <label htmlFor="currPass">
+                      {t("settings.currentPassword")}
+                    </label>
 
-              </form>
+                    <div className="password-input-wrapper">
+                      <span className="password-input-icon">🔑</span>
+                      <input
+                        id="currPass"
+                        type={showCurrentPassword ? "text" : "password"}
+                        value={currentPassword}
+                        onChange={event => setCurrentPassword(event.target.value)}
+                        placeholder="Enter current password"
+                      />
+                      <button
+                        type="button"
+                        className="password-toggle-btn"
+                        onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                      >
+                        {showCurrentPassword ? "HIDE" : "SHOW"}
+                      </button>
+                    </div>
+
+                  </div>
+
+
+                  <div className="password-field">
+
+                    <label htmlFor="newPass">
+                      {t("settings.newPassword")}
+                    </label>
+
+                    <div className="password-input-wrapper">
+                      <span className="password-input-icon">✨</span>
+                      <input
+                        id="newPass"
+                        type={showNewPassword ? "text" : "password"}
+                        value={newPassword}
+                        onChange={event => setNewPassword(event.target.value)}
+                        placeholder="Enter new password"
+                        minLength={6}
+                      />
+                      <button
+                        type="button"
+                        className="password-toggle-btn"
+                        onClick={() => setShowNewPassword(!showNewPassword)}
+                      >
+                        {showNewPassword ? "HIDE" : "SHOW"}
+                      </button>
+                    </div>
+
+                    <small>
+                      {t("settings.minimumPassword")}
+                    </small>
+
+                  </div>
+
+
+                  <div className="password-field">
+
+                    <label htmlFor="confPass">
+                      {t("settings.confirmPassword")}
+                    </label>
+
+                    <div className="password-input-wrapper">
+                      <span className="password-input-icon">✓</span>
+                      <input
+                        id="confPass"
+                        type={showConfirmPassword ? "text" : "password"}
+                        value={confirmPassword}
+                        onChange={event => setConfirmPassword(event.target.value)}
+                        placeholder="Re-enter new password"
+                        minLength={6}
+                      />
+                      <button
+                        type="button"
+                        className="password-toggle-btn"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      >
+                        {showConfirmPassword ? "HIDE" : "SHOW"}
+                      </button>
+                    </div>
+
+                  </div>
+
+
+                  <button
+                    type="submit"
+                    className="password-button"
+                    disabled={changingPassword}
+                  >
+                    {changingPassword
+                      ? t("settings.changingPassword")
+                      : t("settings.changePasswordButton")}
+                  </button>
+
+                </form>
+              </div>
 
             </section>
 

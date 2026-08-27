@@ -4,7 +4,10 @@ import { Link, useNavigate } from "react-router-dom";
 import "./Register.css";
 
 
-const API = "https://nearconnect-backend-cavd.onrender.com";
+const API =
+  window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+    ? "http://127.0.0.1:5001"
+    : "https://nearconnect-backend-cavd.onrender.com";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -28,6 +31,10 @@ export default function Register() {
   const [error, setError] = useState("");
 
   const [success, setSuccess] = useState("");
+
+  const [showOtpStep, setShowOtpStep] = useState(false);
+  const [otpCode, setOtpCode] = useState("");
+  const [pendingEmail, setPendingEmail] = useState("");
 
 
   // =========================================
@@ -161,14 +168,14 @@ export default function Register() {
 
 
     // =========================================
-    // SEND TO FLASK
+    // SEND REGISTRATION OTP
     // =========================================
 
     try {
       setLoading(true);
 
       const response = await fetch(
-        `${API}/api/auth/register`,
+        `${API}/api/auth/send-registration-otp`,
         {
           method: "POST",
 
@@ -192,7 +199,7 @@ export default function Register() {
 
 
       console.log(
-        "Register response:",
+        "Send OTP response:",
         data
       );
 
@@ -205,48 +212,171 @@ export default function Register() {
         throw new Error(
           data.error ||
             data.message ||
-            "Unable to create account."
+            "Unable to send verification code."
         );
       }
 
 
       // =========================================
-      // SUCCESS
+      // SUCCESS: SHOW OTP STEP
       // =========================================
+
+      setPendingEmail(email);
+      setShowOtpStep(true);
 
       setSuccess(
-        "Account created successfully."
+        `A 6-digit verification code has been sent to ${email} from NearConnect.`
       );
-
-
-      setFormData({
-        name: "",
-        username: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-      });
-
-
-      // =========================================
-      // GO TO LOGIN
-      // =========================================
-
-      setTimeout(() => {
-        navigate("/login");
-      }, 1200);
-
 
     } catch (err) {
 
       console.error(
-        "Registration error:",
+        "Send OTP error:",
         err
       );
 
       setError(
         err.message ||
-          "Unable to create account. Please try again."
+          "Unable to send verification code. Please try again."
+      );
+
+    } finally {
+
+      setLoading(false);
+
+    }
+
+  };
+
+
+  // =========================================
+  // VERIFY REGISTRATION OTP
+  // =========================================
+
+  const handleVerifyOtp = async (e) => {
+    e.preventDefault();
+
+    setError("");
+    setSuccess("");
+
+    const cleanOtp = otpCode.trim();
+
+    if (!cleanOtp) {
+      setError("Please enter the 6-digit verification code sent to your email.");
+      return;
+    }
+
+    if (cleanOtp.length < 6) {
+      setError("Verification code must be 6 digits.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const response = await fetch(
+        `${API}/api/auth/verify-registration-otp`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: pendingEmail || formData.email,
+            otp: cleanOtp,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.error ||
+            data.message ||
+            "Invalid or expired verification code."
+        );
+      }
+
+      if (data.token) {
+        localStorage.setItem("nearconnect_token", data.token);
+      }
+
+      if (data.user) {
+        localStorage.setItem("nearconnect_user", JSON.stringify(data.user));
+      }
+
+      setSuccess("Email verified! Account created successfully.");
+
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 1000);
+
+    } catch (err) {
+
+      console.error(
+        "Verify OTP error:",
+        err
+      );
+
+      setError(
+        err.message ||
+          "Invalid verification code. Please try again."
+      );
+
+    } finally {
+
+      setLoading(false);
+
+    }
+
+  };
+
+
+  // =========================================
+  // RESEND OTP
+  // =========================================
+
+  const handleResendOtp = async () => {
+    setError("");
+    setSuccess("");
+
+    try {
+      setLoading(true);
+
+      const response = await fetch(
+        `${API}/api/auth/send-registration-otp`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: formData.name,
+            username: formData.username,
+            email: pendingEmail || formData.email,
+            password: formData.password,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.error ||
+            data.message ||
+            "Unable to resend verification code."
+        );
+      }
+
+      setSuccess(`A new 6-digit verification code has been sent to ${pendingEmail || formData.email}.`);
+
+    } catch (err) {
+
+      setError(
+        err.message ||
+          "Unable to resend verification code."
       );
 
     } finally {
@@ -546,242 +676,327 @@ export default function Register() {
                 FORM
             ================================= */}
 
-            <form
-              className="register-form"
-              onSubmit={handleSubmit}
-              autoComplete="on"
-            >
-
-
-              {/* NAME */}
-
-              <div className="register-field">
-
-                <label htmlFor="name">
-                  Full name
-                </label>
-
-                <div className="register-input-wrapper">
-
-                  <span className="register-input-prefix">
-                    👤
-                  </span>
-
-                  <input
-                    id="name"
-                    name="name"
-                    type="text"
-                    value={formData.name}
-                    onChange={handleChange}
-                    placeholder="Enter your full name"
-                    autoComplete="name"
-                    disabled={loading}
-                  />
-
-                </div>
-
-              </div>
-
-
-              {/* USERNAME */}
-
-              <div className="register-field">
-
-                <label htmlFor="username">
-                  Username
-                </label>
-
-                <div className="register-input-wrapper">
-
-                  <span className="register-input-prefix">
-                    @
-                  </span>
-
-                  <input
-                    id="username"
-                    name="username"
-                    type="text"
-                    value={formData.username}
-                    onChange={handleChange}
-                    placeholder="Choose your username"
-                    autoComplete="username"
-                    disabled={loading}
-                  />
-
-                </div>
-
-                <span className="register-field-hint">
-                  At least 3 characters
-                </span>
-
-              </div>
-
-
-              {/* EMAIL */}
-
-              <div className="register-field">
-
-                <label htmlFor="email">
-                  Email address
-                </label>
-
-                <div className="register-input-wrapper">
-
-                  <span className="register-input-prefix">
-                    ✉
-                  </span>
-
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    placeholder="you@example.com"
-                    autoComplete="email"
-                    disabled={loading}
-                  />
-
-                </div>
-
-              </div>
-
-
-              {/* PASSWORD */}
-
-              <div className="register-field">
-
-                <label htmlFor="password">
-                  Password
-                </label>
-
-                <div className="register-input-wrapper">
-
-                  <span className="register-input-prefix password-prefix">
-                    •
-                  </span>
-
-                  <input
-                    id="password"
-                    name="password"
-                    type={
-                      showPassword
-                        ? "text"
-                        : "password"
-                    }
-                    value={formData.password}
-                    onChange={handleChange}
-                    placeholder="Create a password"
-                    autoComplete="new-password"
-                    disabled={loading}
-                  />
-
-                  <button
-                    type="button"
-                    className="register-show-button"
-                    onClick={() =>
-                      setShowPassword(
-                        (previous) =>
-                          !previous
-                      )
-                    }
-                  >
-                    {showPassword
-                      ? "HIDE"
-                      : "SHOW"}
-                  </button>
-
-                </div>
-
-                <span className="register-field-hint">
-                  At least 6 characters
-                </span>
-
-              </div>
-
-
-              {/* CONFIRM PASSWORD */}
-
-              <div className="register-field">
-
-                <label htmlFor="confirmPassword">
-                  Confirm password
-                </label>
-
-                <div className="register-input-wrapper">
-
-                  <span className="register-input-prefix password-prefix">
-                    •
-                  </span>
-
-                  <input
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    type={
-                      showConfirmPassword
-                        ? "text"
-                        : "password"
-                    }
-                    value={
-                      formData.confirmPassword
-                    }
-                    onChange={handleChange}
-                    placeholder="Enter your password again"
-                    autoComplete="new-password"
-                    disabled={loading}
-                  />
-
-                  <button
-                    type="button"
-                    className="register-show-button"
-                    onClick={() =>
-                      setShowConfirmPassword(
-                        (previous) =>
-                          !previous
-                      )
-                    }
-                  >
-                    {showConfirmPassword
-                      ? "HIDE"
-                      : "SHOW"}
-                  </button>
-
-                </div>
-
-              </div>
-
-
-              {/* SUBMIT */}
-
-              <button
-                type="submit"
-                className="register-submit"
-                disabled={loading}
+            {!showOtpStep ? (
+              <form
+                className="register-form"
+                onSubmit={handleSubmit}
+                autoComplete="on"
               >
 
-                {loading ? (
 
-                  <>
-                    <span className="register-spinner"></span>
+                {/* NAME */}
 
-                    Creating account
-                  </>
+                <div className="register-field">
 
-                ) : (
+                  <label htmlFor="name">
+                    Full name
+                  </label>
 
-                  <>
-                    Create account
+                  <div className="register-input-wrapper">
 
-                    <span className="register-submit-arrow">
-                      →
+                    <span className="register-input-prefix">
+                      👤
                     </span>
-                  </>
 
-                )}
+                    <input
+                      id="name"
+                      name="name"
+                      type="text"
+                      value={formData.name}
+                      onChange={handleChange}
+                      placeholder="Enter your full name"
+                      autoComplete="name"
+                      disabled={loading}
+                    />
 
-              </button>
+                  </div>
 
-            </form>
+                </div>
+
+
+                {/* USERNAME */}
+
+                <div className="register-field">
+
+                  <label htmlFor="username">
+                    Username
+                  </label>
+
+                  <div className="register-input-wrapper">
+
+                    <span className="register-input-prefix">
+                      @
+                    </span>
+
+                    <input
+                      id="username"
+                      name="username"
+                      type="text"
+                      value={formData.username}
+                      onChange={handleChange}
+                      placeholder="Choose your username"
+                      autoComplete="username"
+                      disabled={loading}
+                    />
+
+                  </div>
+
+                  <span className="register-field-hint">
+                    At least 3 characters
+                  </span>
+
+                </div>
+
+
+                {/* EMAIL */}
+
+                <div className="register-field">
+
+                  <label htmlFor="email">
+                    Email address
+                  </label>
+
+                  <div className="register-input-wrapper">
+
+                    <span className="register-input-prefix">
+                      ✉
+                    </span>
+
+                    <input
+                      id="email"
+                      name="email"
+                      type="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      placeholder="you@example.com"
+                      autoComplete="email"
+                      disabled={loading}
+                    />
+
+                  </div>
+
+                </div>
+
+
+                {/* PASSWORD */}
+
+                <div className="register-field">
+
+                  <label htmlFor="password">
+                    Password
+                  </label>
+
+                  <div className="register-input-wrapper">
+
+                    <span className="register-input-prefix password-prefix">
+                      •
+                    </span>
+
+                    <input
+                      id="password"
+                      name="password"
+                      type={
+                        showPassword
+                          ? "text"
+                          : "password"
+                      }
+                      value={formData.password}
+                      onChange={handleChange}
+                      placeholder="Create a password"
+                      autoComplete="new-password"
+                      disabled={loading}
+                    />
+
+                    <button
+                      type="button"
+                      className="register-show-button"
+                      onClick={() =>
+                        setShowPassword(
+                          (previous) =>
+                            !previous
+                        )
+                      }
+                    >
+                      {showPassword
+                        ? "HIDE"
+                        : "SHOW"}
+                    </button>
+
+                  </div>
+
+                  <span className="register-field-hint">
+                    At least 6 characters
+                  </span>
+
+                </div>
+
+
+                {/* CONFIRM PASSWORD */}
+
+                <div className="register-field">
+
+                  <label htmlFor="confirmPassword">
+                    Confirm password
+                  </label>
+
+                  <div className="register-input-wrapper">
+
+                    <span className="register-input-prefix password-prefix">
+                      •
+                    </span>
+
+                    <input
+                      id="confirmPassword"
+                      name="confirmPassword"
+                      type={
+                        showConfirmPassword
+                          ? "text"
+                          : "password"
+                      }
+                      value={
+                        formData.confirmPassword
+                      }
+                      onChange={handleChange}
+                      placeholder="Enter your password again"
+                      autoComplete="new-password"
+                      disabled={loading}
+                    />
+
+                    <button
+                      type="button"
+                      className="register-show-button"
+                      onClick={() =>
+                        setShowConfirmPassword(
+                          (previous) =>
+                            !previous
+                        )
+                      }
+                    >
+                      {showConfirmPassword
+                        ? "HIDE"
+                        : "SHOW"}
+                    </button>
+
+                  </div>
+
+                </div>
+
+
+                {/* SUBMIT */}
+
+                <button
+                  type="submit"
+                  className="register-submit"
+                  disabled={loading}
+                >
+
+                  {loading ? (
+
+                    <>
+                      <span className="register-spinner"></span>
+
+                      Sending verification code...
+                    </>
+
+                  ) : (
+
+                    <>
+                      Verify Email & Continue
+
+                      <span className="register-submit-arrow">
+                        →
+                      </span>
+                    </>
+
+                  )}
+
+                </button>
+
+              </form>
+            ) : (
+              <form
+                className="register-form"
+                onSubmit={handleVerifyOtp}
+              >
+                <div className="register-field">
+                  <label htmlFor="otpCode">
+                    6-Digit Verification Code
+                  </label>
+
+                  <div className="register-input-wrapper">
+                    <span className="register-input-prefix">
+                      🔑
+                    </span>
+
+                    <input
+                      id="otpCode"
+                      name="otpCode"
+                      type="text"
+                      maxLength={6}
+                      value={otpCode}
+                      onChange={(e) => {
+                        setOtpCode(e.target.value);
+                        setError("");
+                      }}
+                      placeholder="Enter 6-digit code"
+                      autoFocus
+                      disabled={loading}
+                      style={{ letterSpacing: "3px", fontSize: "18px", fontWeight: "700" }}
+                    />
+                  </div>
+
+                  <span className="register-field-hint">
+                    Check your email inbox for the code sent by NearConnect.
+                  </span>
+                </div>
+
+                <button
+                  type="submit"
+                  className="register-submit"
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <>
+                      <span className="register-spinner"></span>
+                      Verifying code...
+                    </>
+                  ) : (
+                    <>
+                      Verify & Create Account
+                      <span className="register-submit-arrow">
+                        ✓
+                      </span>
+                    </>
+                  )}
+                </button>
+
+                <div style={{ marginTop: "16px", display: "flex", justifyContent: "space-between", fontSize: "13px" }}>
+                  <button
+                    type="button"
+                    onClick={handleResendOtp}
+                    disabled={loading}
+                    className="register-show-button"
+                    style={{ position: "static", color: "#6366f1", background: "none", border: "none", cursor: "pointer" }}
+                  >
+                    Resend Code
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowOtpStep(false);
+                      setError("");
+                      setSuccess("");
+                    }}
+                    disabled={loading}
+                    className="register-show-button"
+                    style={{ position: "static", color: "#64748b", background: "none", border: "none", cursor: "pointer" }}
+                  >
+                    ← Edit Details
+                  </button>
+                </div>
+              </form>
+            )}
 
 
             {/* LOGIN */}

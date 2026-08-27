@@ -1,3 +1,30 @@
-backend/env
-frontend/node_modules
+# Virtual Environment
 venv/
+env/
+backend/env/
+
+# Node Modules & Build Outputs
+frontend/node_modules/
+frontend/build/
+frontend/dist/
+
+# Python Cache & Databases
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+backend/*.db
+backend/instance/
+backend/uploads/*
+!backend/uploads/.gitkeep
+
+# Environment Files
+.env
+.env.local
+.env.development.local
+.env.production.local
+
+# OS Files
+.DS_Store
+Thumbs.db

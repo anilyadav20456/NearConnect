@@ -3,6 +3,7 @@ import React, {
   useContext,
   useEffect,
   useMemo,
+  useCallback,
   useState
 } from "react";
 
@@ -89,7 +90,7 @@ export function LanguageProvider({
   // =======================================================
 
   const t =
-    (key) => {
+    useCallback((key) => {
 
       const parts =
         String(key)
@@ -187,7 +188,7 @@ export function LanguageProvider({
 
       return value;
 
-    };
+    }, [language]);
 
 
   // =======================================================
@@ -236,7 +237,8 @@ export function LanguageProvider({
       }),
 
       [
-        language
+        language,
+        t
       ]
     );
 

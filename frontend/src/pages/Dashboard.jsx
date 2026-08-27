@@ -21,10 +21,14 @@ import "./Dashboard.css";
 
 
 const API_BASE =
-  "https://nearconnect-backend-cavd.onrender.com";
+  window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+    ? "http://127.0.0.1:5001"
+    : (process.env.REACT_APP_API_URL || "https://nearconnect-backend-cavd.onrender.com");
 
 const SOCKET_URL =
-  "https://nearconnect-backend-cavd.onrender.com";
+  window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+    ? "http://127.0.0.1:5001"
+    : (process.env.REACT_APP_SOCKET_URL || process.env.REACT_APP_API_URL || "https://nearconnect-backend-cavd.onrender.com");
 
 
 // =========================================================
@@ -100,6 +104,62 @@ export default function Dashboard() {
     friendRequests,
     setFriendRequests
   ] = useState([]);
+
+  const [activeIntroPersonId, setActiveIntroPersonId] = useState(null);
+  const [introMessageMap, setIntroMessageMap] = useState({});
+  const [sendingRequestId, setSendingRequestId] = useState(null);
+
+  const handleSendRequest = async (e, person) => {
+    if (e) e.preventDefault();
+    const targetId = person.id || person.user_id;
+
+    if (!targetId || !token) return;
+
+    try {
+      setSendingRequestId(targetId);
+
+      const introMsg = (introMessageMap[targetId] || "").trim();
+
+      const response = await fetch(`${API_BASE}/api/friends/request/${targetId}`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          message: introMsg,
+        }),
+      });
+
+      let data = {};
+      const contentType = response.headers.get("content-type") || "";
+      if (contentType.includes("application/json")) {
+        data = await response.json();
+      } else {
+        const text = await response.text();
+        data = { message: text.includes("<!doctype") || text.includes("<html") ? `Server error (${response.status})` : text };
+      }
+
+      if (!response.ok) {
+        throw new Error(data.error || data.message || "Unable to send request.");
+      }
+
+      setNearbyPeople((prev) =>
+        prev.map((p) =>
+          (p.id === targetId || p.user_id === targetId)
+            ? { ...p, friendship_status: "pending_sent" }
+            : p
+        )
+      );
+
+      setActiveIntroPersonId(null);
+    } catch (err) {
+      console.error("Send friend request error:", err);
+      alert(err.message || "Unable to send request.");
+    } finally {
+      setSendingRequestId(null);
+    }
+  };
 
 
   // =======================================================
@@ -226,6 +286,7 @@ export default function Dashboard() {
 
     loadDashboard();
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     token,
     navigate
@@ -367,6 +428,7 @@ export default function Dashboard() {
       radius
     );
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [radius]);
 
 
@@ -1005,6 +1067,7 @@ export default function Dashboard() {
 
     };
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
 
@@ -2132,6 +2195,131 @@ export default function Dashboard() {
                       </span>
 
                     )}
+
+                    {/* ACTION BUTTON & INTRO MESSAGE BOX */}
+                    <div style={{ marginTop: "14px" }}>
+                      {person.is_friend || person.friendship_status === "accepted" ? (
+                        <button
+                          type="button"
+                          className="person-connect-btn person-connect-message"
+                          onClick={() => navigate(`/messages?user=${person.id}`)}
+                          style={{
+                            width: "100%",
+                            padding: "10px",
+                            borderRadius: "10px",
+                            background: "linear-gradient(135deg, #6366f1 0%, #a855f7 100%)",
+                            border: "none",
+                            color: "#ffffff",
+                            fontWeight: "700",
+                            fontSize: "13px",
+                            cursor: "pointer",
+                            boxShadow: "0 4px 12px rgba(99, 102, 241, 0.25)"
+                          }}
+                        >
+                          Message 💬
+                        </button>
+                      ) : person.friendship_status === "pending_sent" ? (
+                        <button
+                          type="button"
+                          className="person-connect-btn person-connect-sent"
+                          disabled
+                          style={{
+                            width: "100%",
+                            padding: "10px",
+                            borderRadius: "10px",
+                            background: "#f5f8e9",
+                            border: "1px solid #dce7bc",
+                            color: "#61751f",
+                            fontWeight: "700",
+                            fontSize: "13px",
+                            cursor: "default"
+                          }}
+                        >
+                          Request Sent ✓
+                        </button>
+                      ) : activeIntroPersonId !== person.id ? (
+                        <button
+                          type="button"
+                          className="person-connect-btn"
+                          onClick={() => setActiveIntroPersonId(person.id)}
+                          style={{
+                            width: "100%",
+                            padding: "10px",
+                            borderRadius: "10px",
+                            background: "#0f172a",
+                            border: "1px solid #0f172a",
+                            color: "#ffffff",
+                            fontWeight: "700",
+                            fontSize: "13px",
+                            cursor: "pointer"
+                          }}
+                        >
+                          Connect →
+                        </button>
+                      ) : (
+                        <form
+                          onSubmit={(e) => handleSendRequest(e, person)}
+                          style={{ display: "flex", flexDirection: "column", gap: "8px" }}
+                        >
+                          <input
+                            type="text"
+                            placeholder="Send an intro message (optional)..."
+                            value={introMessageMap[person.id] || ""}
+                            onChange={(e) =>
+                              setIntroMessageMap({
+                                ...introMessageMap,
+                                [person.id]: e.target.value,
+                              })
+                            }
+                            autoFocus
+                            style={{
+                              width: "100%",
+                              padding: "8px 12px",
+                              borderRadius: "8px",
+                              border: "1px solid rgba(255, 255, 255, 0.15)",
+                              background: "rgba(15, 23, 42, 0.8)",
+                              color: "#ffffff",
+                              fontSize: "12px",
+                              outline: "none"
+                            }}
+                          />
+                          <div style={{ display: "flex", gap: "6px" }}>
+                            <button
+                              type="submit"
+                              disabled={sendingRequestId === person.id}
+                              style={{
+                                flex: 1,
+                                padding: "8px",
+                                borderRadius: "8px",
+                                background: "#6366f1",
+                                border: "none",
+                                color: "#ffffff",
+                                fontWeight: "700",
+                                fontSize: "12px",
+                                cursor: "pointer"
+                              }}
+                            >
+                              {sendingRequestId === person.id ? "Sending..." : "Send Request"}
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setActiveIntroPersonId(null)}
+                              style={{
+                                padding: "8px 12px",
+                                borderRadius: "8px",
+                                background: "transparent",
+                                border: "1px solid rgba(255, 255, 255, 0.2)",
+                                color: "#94a3b8",
+                                fontSize: "12px",
+                                cursor: "pointer"
+                              }}
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        </form>
+                      )}
+                    </div>
 
                   </article>
 

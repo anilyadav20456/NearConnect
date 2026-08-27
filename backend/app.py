@@ -31,6 +31,16 @@ from werkzeug.utils import secure_filename
 
 from sqlalchemy import text
 
+import random
+from brevo_service import (
+    check_brevo_account,
+    send_brevo_email,
+    send_registration_otp_email,
+    send_welcome_email,
+    send_password_reset_email,
+    send_message_notification_email
+)
+
 from models import (
     db,
     User,
@@ -98,19 +108,17 @@ app.config["MAX_CONTENT_LENGTH"] = (
 app.config["UPLOAD_FOLDER"] = UPLOAD_DIR
 
 
-# =========================================================
-# CORS
-# =========================================================
+cors_origins_env = os.environ.get("CORS_ORIGINS", "*")
+if cors_origins_env == "*":
+    allowed_origins = "*"
+else:
+    allowed_origins = [o.strip() for o in cors_origins_env.split(",") if o.strip()]
 
 CORS(
     app,
     resources={
-        r"/api/*": {
-            "origins": [
-                "http://localhost:3000",
-                "http://127.0.0.1:3000",
-                "https://nearconnect-frontend.onrender.com"
-            ]
+        r"/*": {
+            "origins": allowed_origins
         }
     },
     supports_credentials=True
@@ -123,11 +131,7 @@ CORS(
 
 socketio = SocketIO(
     app,
-    cors_allowed_origins=[
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
-        "https://nearconnect-frontend.onrender.com"
-    ],
+    cors_allowed_origins=allowed_origins,
     async_mode="threading",
     logger=False,
     engineio_logger=False
@@ -148,6 +152,9 @@ db.init_app(app)
 connected_users = {}
 
 # user_id -> set(socket_id)
+
+pending_registrations = {}
+# email -> { name, username, email, password, otp, expires_at }
 
 
 # =========================================================
@@ -349,8 +356,17 @@ def serialize_message(
         "is_read": bool(
             message.is_read
         ),
+        "is_edited": bool(
+            getattr(message, "is_edited", False)
+        ),
+        "is_deleted": bool(
+            getattr(message, "is_deleted", False)
+        ),
+        "is_pinned": bool(
+            getattr(message, "is_pinned", False)
+        ),
         "created_at": (
-            message.created_at.isoformat()
+            (message.created_at.isoformat() + "Z")
             if message.created_at
             else None
         ),
@@ -379,7 +395,7 @@ def serialize_notification(
             notification.is_read
         ),
         "created_at": (
-            notification.created_at.isoformat()
+            (notification.created_at.isoformat() + "Z")
             if notification.created_at
             else None
         )
@@ -457,6 +473,36 @@ def are_friends(
     ).first()
 
     return request_row is not None
+
+
+def get_friendship_status(
+    user_a_id,
+    user_b_id
+):
+    request_row = FriendRequest.query.filter(
+        (
+            (FriendRequest.sender_id == user_a_id)
+            &
+            (FriendRequest.receiver_id == user_b_id)
+        )
+        |
+        (
+            (FriendRequest.sender_id == user_b_id)
+            &
+            (FriendRequest.receiver_id == user_a_id)
+        )
+    ).order_by(FriendRequest.created_at.desc()).first()
+
+    if not request_row:
+        return "none"
+    if request_row.status == "accepted":
+        return "accepted"
+    if request_row.status == "pending":
+        if request_row.sender_id == user_a_id:
+            return "pending_sent"
+        else:
+            return "pending_received"
+    return "none"
 
 
 def notify_user(
@@ -706,7 +752,127 @@ def health():
 
 
 # =========================================================
-# AUTH - REGISTER
+# AUTH - SEND REGISTRATION OTP
+# =========================================================
+
+@app.post(
+    "/api/auth/send-registration-otp"
+)
+def send_registration_otp():
+    try:
+        data = request.get_json(silent=True) or {}
+        name = (data.get("name") or "").strip()
+        username = (data.get("username") or "").strip().lower()
+        email = (data.get("email") or "").strip().lower()
+        password = data.get("password") or ""
+
+        if not name:
+            return json_error("Name is required.")
+        if not username:
+            return json_error("Username is required.")
+        if not email:
+            return json_error("Email is required.")
+        if len(password) < 6:
+            return json_error("Password must be at least 6 characters.")
+
+        if User.query.filter_by(username=username).first():
+            return json_error("Username already exists.", 409)
+
+        if User.query.filter_by(email=email).first():
+            return json_error("Email already exists.", 409)
+
+        otp = f"{random.randint(100000, 999999)}"
+        expires_at = datetime.utcnow() + timedelta(minutes=15)
+
+        pending_registrations[email] = {
+            "name": name,
+            "username": username,
+            "email": email,
+            "password": password,
+            "otp": otp,
+            "expires_at": expires_at
+        }
+
+        # Send email OTP via Brevo NearConnect
+        send_registration_otp_email(email, name, otp)
+
+        return jsonify({
+            "message": f"Verification code sent to {email}.",
+            "email": email
+        })
+
+    except Exception as error:
+        print("SEND REGISTRATION OTP ERROR:", error)
+        return json_error("Unable to send verification email.", 500)
+
+
+@app.post(
+    "/api/auth/verify-registration-otp"
+)
+def verify_registration_otp():
+    try:
+        data = request.get_json(silent=True) or {}
+        email = (data.get("email") or "").strip().lower()
+        otp = (data.get("otp") or "").strip()
+
+        if not email or not otp:
+            return json_error("Email and OTP code are required.")
+
+        pending_user = pending_registrations.get(email)
+        if not pending_user:
+            return json_error("No pending registration found. Please register again.", 404)
+
+        if pending_user["otp"] != otp:
+            return json_error("Invalid verification code. Please check your email.", 400)
+
+        if datetime.utcnow() > pending_user["expires_at"]:
+            return json_error("Verification code has expired. Please click resend.", 400)
+
+        # Create user account after successful verification
+        user = User(
+            name=pending_user["name"],
+            username=pending_user["username"],
+            email=pending_user["email"],
+            password=generate_password_hash(pending_user["password"]),
+            bio="",
+            profession="",
+            interests="",
+            profile_image="",
+            is_discoverable=True,
+            is_online=False,
+            show_online_status=True,
+            language="en",
+            default_radius=2
+        )
+
+        db.session.add(user)
+        db.session.commit()
+
+        # Send welcome email from NearConnect
+        try:
+            send_welcome_email(user.email, user.name)
+        except Exception as e:
+            print("Welcome email error:", e)
+
+        # Clear pending registration
+        pending_registrations.pop(email, None)
+
+        token = create_token(user)
+
+        return jsonify({
+            "message": "Email verified! Account created successfully.",
+            "token": token,
+            "user": serialize_user(user, include_private=True)
+        }), 201
+
+    except Exception as error:
+        db.session.rollback()
+        print("VERIFY REGISTRATION OTP ERROR:", error)
+        return json_error("Unable to complete account verification.", 500)
+
+
+# =========================================================
+# AUTH - REGISTER (DIRECT)
 # =========================================================
 
 @app.post(
@@ -815,6 +981,11 @@ def register():
 
         db.session.commit()
 
+        # Send welcome email from NearConnect
+        try:
+            send_welcome_email(user.email, user.name)
+        except Exception as e:
+            print("Welcome email error:", e)
 
         token = create_token(
             user
@@ -869,36 +1040,26 @@ def login():
         ) or {}
 
 
-        username = (
-            data.get(
-                "username"
-            )
-            or ""
+        user_identifier = (
+            data.get("username") or data.get("email") or ""
         ).strip().lower()
 
         password = (
-            data.get(
-                "password"
-            )
-            or ""
+            data.get("password") or ""
         )
 
-
-        if not username or not password:
-
+        if not user_identifier or not password:
             return json_error(
-                "Username and password are required.",
+                "Username/Email and password are required.",
                 400
             )
 
-
-        user = User.query.filter_by(
-            username=username
+        user = User.query.filter(
+            (db.func.lower(User.username) == user_identifier) |
+            (db.func.lower(User.email) == user_identifier)
         ).first()
 
-
         if not user:
-
             return json_error(
                 "Invalid username or password.",
                 401
@@ -1747,6 +1908,15 @@ def nearby_users(
             )
 
 
+            item["is_friend"] = (
+                get_friendship_status(current_user.id, user.id) == "accepted"
+            )
+
+            item["friendship_status"] = get_friendship_status(
+                current_user.id,
+                user.id
+            )
+
             if not user.show_online_status:
 
                 item["is_online"] = False
@@ -1957,9 +2127,13 @@ def get_friend_requests(
 @app.post(
     "/api/friends/request"
 )
+@app.post(
+    "/api/friends/request/<int:target_id>"
+)
 @token_required
 def send_friend_request(
-    current_user
+    current_user,
+    target_id=None
 ):
 
     try:
@@ -1969,9 +2143,9 @@ def send_friend_request(
         ) or {}
 
 
-        receiver_id = data.get(
+        receiver_id = target_id or data.get(
             "receiver_id"
-        )
+        ) or data.get("user_id")
 
 
         if not receiver_id:
@@ -2048,16 +2222,38 @@ def send_friend_request(
             )
 
 
+        data = request.get_json(silent=True) or {}
+        intro_message = (data.get("message") or "").strip()
+
         friend_request = FriendRequest(
             sender_id=current_user.id,
             receiver_id=receiver.id,
             status="pending"
         )
 
-
         db.session.add(
             friend_request
         )
+
+        if intro_message:
+            intro_msg_obj = Message(
+                sender_id=current_user.id,
+                receiver_id=receiver.id,
+                content=intro_message,
+                is_read=False
+            )
+            db.session.add(intro_msg_obj)
+
+            if not receiver.is_online:
+                try:
+                    send_message_notification_email(
+                        to_email=receiver.email,
+                        to_name=receiver.name or receiver.username,
+                        sender_name=current_user.name or current_user.username,
+                        message_preview=intro_message
+                    )
+                except Exception as e:
+                    print("Intro message email error:", e)
 
         db.session.commit()
 
@@ -2473,6 +2669,9 @@ def block_user(
 @app.delete(
     "/api/users/<int:user_id>/block"
 )
+@app.post(
+    "/api/users/<int:user_id>/unblock"
+)
 @token_required
 def unblock_user(
     current_user,
@@ -2500,12 +2699,34 @@ def unblock_user(
         block
     )
 
+    # Restore previous accepted friendship status if present
+    friendship = FriendRequest.query.filter(
+        (
+            (FriendRequest.sender_id == current_user.id)
+            &
+            (FriendRequest.receiver_id == user_id)
+        )
+        |
+        (
+            (FriendRequest.sender_id == user_id)
+            &
+            (FriendRequest.receiver_id == current_user.id)
+        )
+    ).order_by(
+        FriendRequest.created_at.desc()
+    ).first()
+
+    if friendship and friendship.status == "removed":
+        friendship.status = "accepted"
+
     db.session.commit()
 
 
     return jsonify({
         "message":
-            "User unblocked."
+            "User unblocked.",
+        "friendship_status":
+            friendship.status if friendship else "none"
     })
 
 
@@ -2821,6 +3042,8 @@ def send_message_rest(
                 receiver.id
             )
         )
+        emit_to_user(receiver.id, "new_message", serialized)
+        emit_to_user(current_user.id, "new_message", serialized)
 
 
         return jsonify({
@@ -2842,6 +3065,104 @@ def send_message_rest(
             "Unable to send message.",
             500
         )
+
+
+# =========================================================
+# CHAT MEDIA UPLOAD (IMAGES & VIDEOS)
+# =========================================================
+
+CHAT_UPLOAD_FOLDER = os.path.join(app.root_path, "uploads", "chat_media")
+os.makedirs(CHAT_UPLOAD_FOLDER, exist_ok=True)
+
+ALLOWED_IMAGE_EXTS = {"jpg", "jpeg", "png", "gif", "webp", "svg"}
+ALLOWED_VIDEO_EXTS = {"mp4", "webm", "mov", "avi", "mkv"}
+ALLOWED_CHAT_MEDIA_EXTS = ALLOWED_IMAGE_EXTS | ALLOWED_VIDEO_EXTS
+
+
+@app.post(
+    "/api/messages/upload"
+)
+@token_required
+def upload_chat_media(
+    current_user
+):
+    try:
+        receiver_id = request.form.get("receiver_id")
+        if not receiver_id:
+            return json_error("receiver_id is required.", 400)
+
+        receiver = db.session.get(User, int(receiver_id))
+        if not receiver:
+            return json_error("Receiver user not found.", 404)
+
+        if not can_message(current_user.id, receiver.id):
+            return json_error("You can only message accepted friends.", 403)
+
+        if "file" not in request.files:
+            return json_error("No media file uploaded.", 400)
+
+        file = request.files["file"]
+        if not file or file.filename == "":
+            return json_error("Invalid file.", 400)
+
+        filename_lower = file.filename.lower()
+        ext = filename_lower.rsplit(".", 1)[-1] if "." in filename_lower else ""
+
+        if ext not in ALLOWED_CHAT_MEDIA_EXTS:
+            return json_error(f"File type .{ext} is not supported. Please upload an image or video.", 400)
+
+        media_type = "IMAGE" if ext in ALLOWED_IMAGE_EXTS else "VIDEO"
+        safe_name = f"{uuid.uuid4().hex}_{secure_filename(file.filename)}"
+        filepath = os.path.join(CHAT_UPLOAD_FOLDER, safe_name)
+        file.save(filepath)
+
+        media_url = f"/media/chat/{safe_name}"
+        caption = (request.form.get("content") or "").strip()
+
+        formatted_content = f"[{media_type}]:{media_url}"
+        if caption:
+            formatted_content += f" {caption}"
+
+        message = Message(
+            sender_id=current_user.id,
+            receiver_id=receiver.id,
+            content=formatted_content,
+            is_read=False
+        )
+        db.session.add(message)
+        db.session.commit()
+
+        serialized = serialize_message(message)
+
+        notify_user(
+            receiver.id,
+            "new_message",
+            f"New {media_type.lower()} from {current_user.name or current_user.username}",
+            caption or f"Sent a {media_type.lower()}",
+            related_user_id=current_user.id,
+            related_message_id=message.id
+        )
+
+        room = room_name(current_user.id, receiver.id)
+        socketio.emit("new_message", serialized, room=room)
+        emit_to_user(receiver.id, "new_message", serialized)
+        emit_to_user(current_user.id, "new_message", serialized)
+
+        return jsonify({
+            "message": serialized
+        }), 201
+
+    except Exception as error:
+        db.session.rollback()
+        print("CHAT MEDIA UPLOAD ERROR:", error)
+        return json_error("Unable to upload media.", 500)
+
+
+@app.get(
+    "/media/chat/<filename>"
+)
+def serve_chat_media(filename):
+    return send_from_directory(CHAT_UPLOAD_FOLDER, filename)
 
 
 # =========================================================
@@ -2880,6 +3201,26 @@ def get_messages(
     )
 
 
+    # Auto mark incoming messages as read when user opens the conversation
+    unread_rows = Message.query.filter(
+        (Message.sender_id == friend_id) &
+        (Message.receiver_id == current_user.id) &
+        (Message.is_read.is_(False))
+    ).update({"is_read": True}, synchronize_session=False)
+
+    if unread_rows > 0:
+        db.session.commit()
+        room = room_name(current_user.id, friend_id)
+        read_payload = {
+            "user_id": current_user.id,
+            "reader_id": current_user.id,
+            "friend_id": friend_id
+        }
+        socketio.emit("message_read", read_payload, room=room)
+        socketio.emit("messages_read", read_payload, room=room)
+        emit_to_user(friend_id, "message_read", read_payload)
+        emit_to_user(current_user.id, "message_read", read_payload)
+
     rows = Message.query.filter(
         (
             (Message.sender_id == current_user.id)
@@ -2911,6 +3252,48 @@ def get_messages(
             ]
 
     })
+
+
+# =========================================================
+# MARK MESSAGES AS READ
+# =========================================================
+
+@app.put(
+    "/api/messages/<int:friend_id>/read"
+)
+@token_required
+def mark_messages_as_read(
+    current_user,
+    friend_id
+):
+    try:
+        updated_count = Message.query.filter(
+            (Message.sender_id == friend_id) &
+            (Message.receiver_id == current_user.id) &
+            (Message.is_read.is_(False))
+        ).update({"is_read": True}, synchronize_session=False)
+
+        if updated_count > 0:
+            db.session.commit()
+            room = room_name(current_user.id, friend_id)
+            read_payload = {
+                "user_id": current_user.id,
+                "reader_id": current_user.id,
+                "friend_id": friend_id
+            }
+            socketio.emit("message_read", read_payload, room=room)
+            socketio.emit("messages_read", read_payload, room=room)
+            emit_to_user(friend_id, "message_read", read_payload)
+            emit_to_user(current_user.id, "message_read", read_payload)
+
+        return jsonify({
+            "message": "Messages marked as read",
+            "updated_count": updated_count
+        }), 200
+    except Exception as error:
+        db.session.rollback()
+        print("MARK MESSAGES READ ERROR:", error)
+        return json_error("Unable to mark messages as read.", 500)
 
 
 # =========================================================
@@ -3313,60 +3696,33 @@ def mark_all_notifications_read(
 # =========================================================
 
 def socket_current_user(
-    auth
+    auth=None
 ):
-
-    if not auth:
-        return None
-
+    for uid, sockets in connected_users.items():
+        if hasattr(request, "sid") and request.sid in sockets:
+            return uid
 
     token = None
+    if isinstance(auth, dict):
+        token = auth.get("token")
+        if not token and "auth" in auth and isinstance(auth["auth"], dict):
+            token = auth["auth"].get("token")
 
-
-    if isinstance(
-        auth,
-        dict
-    ):
-
-        token = auth.get(
-            "token"
-        )
-
+    if not token and hasattr(request, "args"):
+        token = request.args.get("token")
 
     if not token:
         return None
 
-
-    payload = decode_token(
-        token
-    )
-
-
+    payload = decode_token(token)
     if not payload:
         return None
 
-
-    user_id = payload.get(
-        "user_id"
-    )
-
-
+    user_id = payload.get("user_id")
     if not user_id:
         return None
 
-
-    with app.app_context():
-
-        user = db.session.get(
-            User,
-            int(user_id)
-        )
-
-        return (
-            user.id
-            if user
-            else None
-        )
+    return int(user_id)
 
 
 # =========================================================
@@ -3514,17 +3870,7 @@ def socket_join_room(
 ):
 
     user_id = socket_current_user(
-        {
-            "token":
-                data.get(
-                    "token"
-                )
-        }
-        if isinstance(
-            data,
-            dict
-        )
-        else {}
+        data
     )
 
 
@@ -3680,17 +4026,9 @@ def socket_send_message(
             return
 
 
-        token = data.get(
-            "token"
-        )
+        sender_id = socket_current_user(data)
 
-
-        payload = decode_token(
-            token
-        )
-
-
-        if not payload:
+        if not sender_id:
 
             emit(
                 "error",
@@ -3701,13 +4039,6 @@ def socket_send_message(
             )
 
             return
-
-
-        sender_id = int(
-            payload.get(
-                "user_id"
-            )
-        )
 
 
         receiver_id = int(
@@ -3818,6 +4149,18 @@ def socket_send_message(
 
             db.session.commit()
 
+            # Send email notification if receiver is offline
+            if receiver and receiver.email and not receiver.is_online:
+                try:
+                    send_message_notification_email(
+                        receiver.email,
+                        receiver.name or receiver.username,
+                        sender.name or sender.username,
+                        content[:200]
+                    )
+                except Exception as e:
+                    print("Offline message email notification error:", e)
+
 
             room = room_name(
                 sender_id,
@@ -3830,6 +4173,8 @@ def socket_send_message(
                 serialized,
                 room=room
             )
+            emit_to_user(receiver_id, "new_message", serialized)
+            emit_to_user(sender_id, "new_message", serialized)
 
 
             socketio.emit(
@@ -3896,24 +4241,10 @@ def socket_typing(
             return
 
 
-        token = data.get(
-            "token"
-        )
+        user_id = socket_current_user(data)
 
-        payload = decode_token(
-            token
-        )
-
-
-        if not payload:
+        if not user_id:
             return
-
-
-        user_id = int(
-            payload.get(
-                "user_id"
-            )
-        )
 
 
         friend_id = int(
@@ -3977,22 +4308,10 @@ def socket_stop_typing(
             return
 
 
-        payload = decode_token(
-            data.get(
-                "token"
-            )
-        )
+        user_id = socket_current_user(data)
 
-
-        if not payload:
+        if not user_id:
             return
-
-
-        user_id = int(
-            payload.get(
-                "user_id"
-            )
-        )
 
 
         friend_id = int(
@@ -4056,22 +4375,10 @@ def socket_mark_read(
             return
 
 
-        payload = decode_token(
-            data.get(
-                "token"
-            )
-        )
+        reader_id = socket_current_user(data)
 
-
-        if not payload:
+        if not reader_id:
             return
-
-
-        reader_id = int(
-            payload.get(
-                "user_id"
-            )
-        )
 
 
         sender_id = int(
@@ -4233,15 +4540,189 @@ def internal_server_error(
         }), 500
 
 
-    return (
-        "Something went wrong. Please try again.",
-        500
+# =========================================================
+# ADMIN - DELETE USER BY EMAIL
+# =========================================================
+
+@app.post(
+    "/api/admin/delete-user"
+)
+def admin_delete_user():
+    """Deletes a user account by email from database along with associated records."""
+    data = request.get_json(silent=True) or {}
+    email = (data.get("email") or "").strip().lower()
+
+    if not email:
+        return json_error("Email is required.")
+
+    user = User.query.filter(db.func.lower(User.email) == email).first()
+
+    if not user:
+        return jsonify({
+            "message": f"User {email} is not in the database.",
+            "deleted": False
+        }), 404
+
+    uid = user.id
+    Notification.query.filter((Notification.user_id == uid) | (Notification.related_user_id == uid)).delete(synchronize_session=False)
+    Message.query.filter((Message.sender_id == uid) | (Message.receiver_id == uid)).delete(synchronize_session=False)
+    FriendRequest.query.filter((FriendRequest.sender_id == uid) | (FriendRequest.receiver_id == uid)).delete(synchronize_session=False)
+    Block.query.filter((Block.blocker_id == uid) | (Block.blocked_id == uid)).delete(synchronize_session=False)
+    Report.query.filter((Report.reporter_id == uid) | (Report.reported_user_id == uid)).delete(synchronize_session=False)
+
+    db.session.delete(user)
+    db.session.commit()
+
+    return jsonify({
+        "message": f"User {email} and all associated data successfully deleted.",
+        "deleted": True
+    })
+
+
+# =========================================================
+# BREVO EMAIL API & PASSWORD RESET ROUTES
+# =========================================================
+
+@app.get(
+    "/api/email/status"
+)
+def email_status():
+    """Returns Brevo integration status and remaining credits."""
+    status_info = check_brevo_account()
+    return jsonify(status_info)
+
+
+@app.post(
+    "/api/email/test"
+)
+def send_test_email():
+    """Send a test email branded with NearConnect."""
+    data = request.get_json(silent=True) or {}
+    to_email = (data.get("email") or "").strip()
+    to_name = (data.get("name") or "Tester").strip()
+
+    if not to_email:
+        return json_error("Recipient email is required.")
+
+    res = send_brevo_email(
+        to_email=to_email,
+        to_name=to_name,
+        subject="NearConnect - Test Email Integration",
+        html_content="<p>This is a test email sent from <strong>NearConnect</strong> via Brevo Email API.</p>",
+        async_send=False
     )
+    if res.get("success"):
+        return jsonify({"message": f"Test email sent to {to_email} from NearConnect.", "res": res})
+    else:
+        return json_error(f"Failed to send test email: {res.get('error')}", 500)
+
+
+@app.post(
+    "/api/auth/forgot-password"
+)
+def forgot_password():
+    """Generates a 6-digit OTP and emails it via Brevo NearConnect sender."""
+    data = request.get_json(silent=True) or {}
+    email = (data.get("email") or "").strip().lower()
+
+    if not email:
+        return json_error("Email is required.")
+
+    user = User.query.filter_by(email=email).first()
+    if not user:
+        return jsonify({
+            "message": "If an account exists with that email, a password reset code has been sent."
+        })
+
+    otp = f"{random.randint(100000, 999999)}"
+    user.reset_otp = otp
+    user.reset_otp_expires = datetime.utcnow() + timedelta(minutes=15)
+    db.session.commit()
+
+    send_password_reset_email(user.email, user.name or user.username, otp)
+
+    return jsonify({
+        "message": "Password reset code sent successfully."
+    })
+
+
+@app.post(
+    "/api/auth/verify-reset-otp"
+)
+def verify_reset_otp():
+    """Verifies 6-digit OTP code."""
+    data = request.get_json(silent=True) or {}
+    email = (data.get("email") or "").strip().lower()
+    otp = (data.get("otp") or "").strip()
+
+    if not email or not otp:
+        return json_error("Email and OTP are required.")
+
+    user = User.query.filter_by(email=email).first()
+    if not user or not user.reset_otp or user.reset_otp != otp:
+        return json_error("Invalid or expired OTP code.", 400)
+
+    if user.reset_otp_expires and datetime.utcnow() > user.reset_otp_expires:
+        return json_error("OTP code has expired. Please request a new one.", 400)
+
+    return jsonify({
+        "message": "OTP verified successfully.",
+        "valid": True
+    })
+
+
+@app.post(
+    "/api/auth/reset-password"
+)
+def reset_password():
+    """Resets user password with valid OTP."""
+    data = request.get_json(silent=True) or {}
+    email = (data.get("email") or "").strip().lower()
+    otp = (data.get("otp") or "").strip()
+    new_password = data.get("new_password") or ""
+
+    if not email or not otp or not new_password:
+        return json_error("Email, OTP code, and new password are required.")
+
+    if len(new_password) < 6:
+        return json_error("Password must be at least 6 characters.")
+
+    user = User.query.filter_by(email=email).first()
+    if not user or not user.reset_otp or user.reset_otp != otp:
+        return json_error("Invalid or expired OTP code.", 400)
+
+    if user.reset_otp_expires and datetime.utcnow() > user.reset_otp_expires:
+        return json_error("OTP code has expired. Please request a new one.", 400)
+
+    user.password = generate_password_hash(new_password)
+    user.reset_otp = None
+    user.reset_otp_expires = None
+    db.session.commit()
+
+    return jsonify({
+        "message": "Password updated successfully. You can now log in with your new password."
+    })
+
 
 
 # =========================================================
 # STARTUP
 # =========================================================
+
+def ensure_database():
+    with app.app_context():
+        db.create_all()
+        with db.engine.connect() as conn:
+            for col, col_type in [
+                ("is_edited", "BOOLEAN DEFAULT 0"),
+                ("is_deleted", "BOOLEAN DEFAULT 0"),
+                ("is_pinned", "BOOLEAN DEFAULT 0")
+            ]:
+                try:
+                    conn.execute(text(f"ALTER TABLE messages ADD COLUMN {col} {col_type};"))
+                    conn.commit()
+                except Exception:
+                    pass
 
 ensure_database()
 

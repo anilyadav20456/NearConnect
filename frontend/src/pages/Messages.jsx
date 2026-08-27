@@ -13,14 +13,17 @@ import { io } from "socket.io-client";
 
 import {
   apiFetch,
-  getToken
+  getToken,
+  getSavedUser
 } from "../api";
 
 import "./Messages.css";
 
 
 const API =
-  "http://127.0.0.1:5001";
+  window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+    ? "http://127.0.0.1:5001"
+    : (process.env.REACT_APP_API_URL || "https://nearconnect-backend-cavd.onrender.com");
 
 
 const getProfileImageUrl = (image) => {
@@ -147,6 +150,11 @@ export default function Messages() {
   const currentUserRef =
     useRef(null);
 
+  const fileInputRef =
+    useRef(null);
+
+  const [uploadingMedia, setUploadingMedia] = useState(false);
+
 
   // =====================================================
   // CURRENT USER
@@ -183,12 +191,6 @@ export default function Messages() {
   }, []);
 
 
-  const currentUserId =
-    Number(
-      currentUserRef.current?.id
-    );
-
-
   // =====================================================
   // AUTH CHECK
   // =====================================================
@@ -221,6 +223,7 @@ export default function Messages() {
 
     loadConversations();
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
 
@@ -399,6 +402,7 @@ export default function Messages() {
       selectedFriendId
     );
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedFriendId]);
 
 
@@ -543,10 +547,11 @@ export default function Messages() {
           // This avoids the current WebSocket "Invalid frame header"
           // problem while keeping real-time messaging working.
           transports: [
+            "websocket",
             "polling"
           ],
 
-          upgrade: false,
+          upgrade: true,
 
           auth: {
             token
@@ -976,28 +981,34 @@ export default function Messages() {
     socket.on(
       "message_read",
       data => {
+        const readerId = Number(data?.reader_id || data?.user_id);
+        const currentFriendId = Number(selectedFriendId);
 
-        if (
-          Number(
-            data.user_id
-          ) ===
-          Number(
-            selectedFriendId
-          )
-        ) {
-
-          setMessages(
-            previous =>
-              previous.map(
-                message => ({
-                  ...message,
-                  is_read: true
-                })
-              )
+        if (readerId === currentFriendId || Number(data?.friend_id) === currentFriendId) {
+          setMessages(previous =>
+            previous.map(message => ({
+              ...message,
+              is_read: true
+            }))
           );
-
         }
+      }
+    );
 
+    socket.on(
+      "messages_read",
+      data => {
+        const readerId = Number(data?.reader_id || data?.user_id);
+        const currentFriendId = Number(selectedFriendId);
+
+        if (readerId === currentFriendId || Number(data?.friend_id) === currentFriendId) {
+          setMessages(previous =>
+            previous.map(message => ({
+              ...message,
+              is_read: true
+            }))
+          );
+        }
       }
     );
 
@@ -1169,6 +1180,7 @@ export default function Messages() {
 
     };
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     token,
     selectedFriendId
@@ -1698,90 +1710,154 @@ export default function Messages() {
 
 
   // =====================================================
+  // MEDIA UPLOAD & RENDER
+  // =====================================================
+
+  const handleMediaSelect = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file || !selectedFriendId || !token) return;
+
+    try {
+      setUploadingMedia(true);
+      setError("");
+
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("receiver_id", selectedFriendId);
+      if (text.trim()) {
+        formData.append("content", text.trim());
+      }
+
+      const response = await fetch(`${API}/api/messages/upload`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        body: formData
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || data.message || "Failed to upload media");
+      }
+
+      const newMsg = data.message;
+      if (newMsg) {
+        setMessages(prev => {
+          if (prev.some(m => Number(m.id) === Number(newMsg.id))) return prev;
+          return [...prev, newMsg];
+        });
+        scrollToBottom();
+      }
+
+      setText("");
+    } catch (err) {
+      console.error("Media upload error:", err);
+      setError(err.message || "Failed to upload media");
+    } finally {
+      setUploadingMedia(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    }
+  };
+
+  const renderMessageContent = (content) => {
+    if (!content) return null;
+
+    if (content.startsWith("[IMAGE]:")) {
+      const spaceIdx = content.indexOf(" ", 8);
+      const url = spaceIdx === -1 ? content.slice(8) : content.slice(8, spaceIdx);
+      const caption = spaceIdx === -1 ? "" : content.slice(spaceIdx + 1);
+      const fullUrl = url.startsWith("http") ? url : `${API}${url}`;
+
+      return (
+        <div className="chat-media-box">
+          <img
+            src={fullUrl}
+            alt="Shared image"
+            className="chat-media-image"
+            onClick={() => window.open(fullUrl, "_blank")}
+          />
+          {caption && <div className="chat-media-caption">{caption}</div>}
+        </div>
+      );
+    }
+
+    if (content.startsWith("[VIDEO]:")) {
+      const spaceIdx = content.indexOf(" ", 8);
+      const url = spaceIdx === -1 ? content.slice(8) : content.slice(8, spaceIdx);
+      const caption = spaceIdx === -1 ? "" : content.slice(spaceIdx + 1);
+      const fullUrl = url.startsWith("http") ? url : `${API}${url}`;
+
+      return (
+        <div className="chat-media-box">
+          <video src={fullUrl} controls className="chat-media-video" />
+          {caption && <div className="chat-media-caption">{caption}</div>}
+        </div>
+      );
+    }
+
+    return content;
+  };
+
+
+  // =====================================================
   // FORMAT MESSAGE TIME
   // =====================================================
 
-  const formatTime =
-    value => {
+  const parseUtcDate = (value) => {
+    if (!value) return null;
+    let str = String(value);
+    if (!str.endsWith("Z") && !str.includes("+") && !str.includes("-", 10)) {
+      str += "Z";
+    }
+    return new Date(str);
+  };
 
-      if (!value) {
-        return "";
-      }
-
-
-      try {
-
-        return new Date(
-          value
-        ).toLocaleTimeString(
-          [],
-          {
-            hour: "2-digit",
-            minute: "2-digit"
-          }
-        );
-
-      } catch {
-
-        return "";
-
-      }
-
-    };
+  const formatTime = (value) => {
+    if (!value) return "";
+    try {
+      const date = parseUtcDate(value);
+      if (!date || isNaN(date.getTime())) return "";
+      return date.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true
+      });
+    } catch {
+      return "";
+    }
+  };
 
 
   // =====================================================
   // FORMAT CONVERSATION TIME
   // =====================================================
 
-  const formatConversationTime =
-    value => {
+  const formatConversationTime = (value) => {
+    if (!value) return "";
+    try {
+      const date = parseUtcDate(value);
+      if (!date || isNaN(date.getTime())) return "";
+      const now = new Date();
 
-      if (!value) {
-        return "";
+      if (date.toDateString() === now.toDateString()) {
+        return date.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: true
+        });
       }
 
-
-      try {
-
-        const date =
-          new Date(value);
-
-        const now =
-          new Date();
-
-
-        if (
-          date.toDateString() ===
-          now.toDateString()
-        ) {
-
-          return date.toLocaleTimeString(
-            [],
-            {
-              hour: "2-digit",
-              minute: "2-digit"
-            }
-          );
-
-        }
-
-
-        return date.toLocaleDateString(
-          [],
-          {
-            day: "2-digit",
-            month: "short"
-          }
-        );
-
-      } catch {
-
-        return "";
-
-      }
-
-    };
+      return date.toLocaleDateString([], {
+        day: "2-digit",
+        month: "short"
+      });
+    } catch {
+      return "";
+    }
+  };
 
 
   // =====================================================
@@ -2415,15 +2491,8 @@ export default function Messages() {
                     {messages.map(
                       message => {
 
-                        const mine =
-                          Number(
-                            message.sender_id
-                          ) ===
-                          Number(
-                            currentUserRef
-                              .current
-                              ?.id
-                          );
+                        const myId = Number(currentUserRef.current?.id || getSavedUser()?.id || 0);
+                        const mine = Number(message.sender_id) === myId;
 
 
                         return (
@@ -2448,15 +2517,15 @@ export default function Messages() {
                             >
 
                               <div className="message-content">
-
-                                {
-                                  message.content
-                                }
-
+                                {renderMessageContent(message.content)}
                               </div>
 
 
                               <div className="message-meta">
+
+                                {message.is_edited && !message.is_deleted && (
+                                  <span className="edited-tag">(edited)</span>
+                                )}
 
                                 <span>
 
@@ -2553,6 +2622,24 @@ export default function Messages() {
 
                 <div className="chat-input-wrapper">
 
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    accept="image/*,video/*"
+                    onChange={handleMediaSelect}
+                    style={{ display: "none" }}
+                  />
+
+                  <button
+                    type="button"
+                    className="media-button"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={uploadingMedia || sending}
+                    title="Attach Image or Video"
+                    aria-label="Attach Image or Video"
+                  >
+                    {uploadingMedia ? "⌛" : "📷"}
+                  </button>
 
                   <button
                     type="button"

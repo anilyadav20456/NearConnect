@@ -2,7 +2,10 @@ import { useEffect, useState } from "react";
 import PersonCard from "./PersonCard";
 import "./NearbyPeople.css";
 
-const API = "https://nearconnect-backend-cavd.onrender.com";
+const API =
+  window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+    ? "http://127.0.0.1:5001"
+    : "https://nearconnect-backend-cavd.onrender.com";
 
 export default function NearbyPeople({ radius }) {
   const [people, setPeople] = useState([]);

@@ -1,9 +1,871 @@
 /* =========================================================
-   NEARCONNECT — MOBILE SETTINGS
+   NEARCONNECT — SETTINGS STYLESHEET (STRICTLY SCOPED)
+   Styles apply ONLY to .settings-page and its sub-elements
+   ========================================================= */
+
+.settings-page {
+  min-height: 100vh;
+  background-color: #090d16;
+  background-image: 
+    radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.12) 0%, transparent 40%),
+    radial-gradient(circle at 85% 85%, rgba(168, 85, 247, 0.12) 0%, transparent 40%);
+  color: #f8fafc;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  padding-bottom: 60px;
+  box-sizing: border-box;
+}
+
+.settings-page * {
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   HEADER / NAVBAR
+   ========================================================= */
+
+.settings-page .settings-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 5%;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.settings-page .settings-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.settings-page .settings-back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #f8fafc;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.settings-page .settings-back:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateX(-2px);
+}
+
+.settings-page .settings-logo {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: #c7ff2e;
+  color: #0f172a;
+  font-weight: 900;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 14px rgba(199, 255, 46, 0.3);
+}
+
+.settings-page .settings-brand h1 {
+  font-size: 20px;
+  font-weight: 800;
+  color: #f8fafc;
+  margin: 0;
+  letter-spacing: -0.3px;
+}
+
+.settings-page .settings-brand p {
+  font-size: 13px;
+  color: #94a3b8;
+  margin: 2px 0 0 0;
+}
+
+.settings-page .settings-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.settings-page .settings-header-actions button {
+  padding: 9px 16px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #f8fafc;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.settings-page .settings-header-actions button:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* =========================================================
+   MAIN LAYOUT & HERO
+   ========================================================= */
+
+.settings-page .settings-main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+
+.settings-page .settings-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(30, 41, 59, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 28px 32px;
+  margin-bottom: 24px;
+  backdrop-filter: blur(12px);
+  position: relative;
+  overflow: hidden;
+}
+
+.settings-page .settings-hero::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+}
+
+.settings-page .settings-label {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: #818cf8;
+  background: rgba(99, 102, 241, 0.15);
+  padding: 4px 10px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  border: 1px solid rgba(99, 102, 241, 0.25);
+}
+
+.settings-page .settings-hero h2 {
+  font-size: 24px;
+  font-weight: 800;
+  margin: 0 0 6px 0;
+  color: #f8fafc;
+}
+
+.settings-page .settings-hero p {
+  font-size: 14px;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.settings-page .settings-hero-icon {
+  font-size: 48px;
+  opacity: 0.85;
+}
+
+/* =========================================================
+   SUCCESS / ERROR ALERTS
+   ========================================================= */
+
+.settings-page .settings-success,
+.settings-page .settings-error {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  border-radius: 14px;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+
+.settings-page .settings-success {
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #34d399;
+}
+
+.settings-page .settings-error {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #f87171;
+}
+
+/* =========================================================
+   GRID & SIDEBAR
+   ========================================================= */
+
+.settings-page .settings-layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 28px;
+}
+
+.settings-page .settings-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: sticky;
+  top: 96px;
+  height: fit-content;
+}
+
+.settings-page .settings-sidebar button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 18px;
+  border-radius: 12px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: #94a3b8;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+}
+
+.settings-page .settings-sidebar button:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #f8fafc;
+}
+
+.settings-page .settings-sidebar button.settings-sidebar-active {
+  background: rgba(30, 41, 59, 0.75);
+  border-color: rgba(99, 102, 241, 0.4);
+  color: #f8fafc;
+  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.2);
+}
+
+.settings-page .settings-sidebar button span {
+  font-size: 18px;
+}
+
+/* =========================================================
+   CARDS & SECTIONS
+   ========================================================= */
+
+.settings-page .settings-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.settings-page .settings-card {
+  background: rgba(30, 41, 59, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 28px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.settings-page .settings-card-header,
+.settings-page .settings-card-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.settings-page .settings-card-heading {
+  justify-content: flex-start;
+  gap: 16px;
+}
+
+.settings-page .settings-section-icon {
+  font-size: 24px;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(99, 102, 241, 0.15);
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.settings-page .settings-card-header span,
+.settings-page .settings-card-heading span {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #818cf8;
+}
+
+.settings-page .settings-card-header h3,
+.settings-page .settings-card-heading h3 {
+  font-size: 18px;
+  font-weight: 750;
+  color: #f8fafc;
+  margin: 2px 0 0 0;
+}
+
+.settings-page .settings-card-header button {
+  padding: 8px 16px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+  border: none;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
+}
+
+.settings-page .settings-card-header button:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
+}
+
+/* =========================================================
+   PROFILE SUMMARY CARD
+   ========================================================= */
+
+.settings-page .settings-profile-summary {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.settings-page .settings-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);
+  color: #ffffff;
+  font-size: 24px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 18px rgba(99, 102, 241, 0.35);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  flex-shrink: 0;
+}
+
+.settings-page .settings-profile-summary strong {
+  font-size: 18px;
+  font-weight: 700;
+  color: #f8fafc;
+  display: block;
+}
+
+.settings-page .settings-profile-summary span {
+  font-size: 13px;
+  color: #818cf8;
+  display: block;
+  margin-top: 2px;
+  margin-bottom: 6px;
+}
+
+.settings-page .settings-profile-summary p {
+  font-size: 13px;
+  color: #94a3b8;
+  margin: 0;
+}
+
+/* =========================================================
+   OPTIONS & TOGGLES
+   ========================================================= */
+
+.settings-page .settings-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 18px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.settings-page .settings-option:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.settings-page .settings-option-icon {
+  font-size: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.settings-page .settings-option-content {
+  flex: 1;
+}
+
+.settings-page .settings-option-content strong {
+  font-size: 15px;
+  font-weight: 650;
+  color: #f8fafc;
+  display: block;
+}
+
+.settings-page .settings-option-content p {
+  font-size: 13px;
+  color: #94a3b8;
+  margin: 4px 0 0 0;
+  line-height: 1.45;
+}
+
+/* TOGGLE SWITCH */
+
+.settings-page .settings-switch {
+  position: relative;
+  display: inline-block;
+  width: 52px;
+  height: 28px;
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+
+.settings-page .settings-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.settings-page .settings-switch span {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.15);
+  transition: 0.3s ease;
+  border-radius: 34px;
+}
+
+.settings-page .settings-switch span:before {
+  position: absolute;
+  content: "";
+  height: 22px;
+  width: 22px;
+  left: 3px;
+  bottom: 3px;
+  background-color: #ffffff;
+  transition: 0.3s ease;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.settings-page .settings-switch input:checked + span {
+  background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+}
+
+.settings-page .settings-switch input:checked + span:before {
+  transform: translateX(24px);
+}
+
+/* RADIUS BUTTONS */
+
+.settings-page .settings-radius-buttons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.settings-page .settings-radius-buttons button {
+  padding: 8px 18px;
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.settings-page .settings-radius-buttons button:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #f8fafc;
+}
+
+.settings-page .settings-radius-buttons button.active {
+  background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+  border-color: transparent;
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+/* INFO BOX */
+
+.settings-page .settings-info-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 18px;
+  border-radius: 12px;
+  background: rgba(99, 102, 241, 0.08);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  margin-top: 16px;
+}
+
+.settings-page .settings-info-box span {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.settings-page .settings-info-box p {
+  font-size: 13px;
+  color: #cbd5e1;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* LANGUAGE GRID */
+
+.settings-page .settings-language-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.settings-page .settings-language-grid button {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+  border-radius: 14px;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #f8fafc;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.settings-page .settings-language-grid button:hover {
+  border-color: rgba(99, 102, 241, 0.4);
+  background: rgba(30, 41, 59, 0.8);
+}
+
+.settings-page .settings-language-grid button.selected {
+  border-color: #6366f1;
+  background: rgba(99, 102, 241, 0.15);
+  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.2);
+}
+
+.settings-page .settings-language-grid button span {
+  font-size: 24px;
+}
+
+.settings-page .settings-language-grid button strong {
+  display: block;
+  font-size: 15px;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.settings-page .settings-language-grid button small {
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.settings-page .settings-language-grid button b {
+  margin-left: auto;
+  color: #818cf8;
+  font-size: 18px;
+}
+
+/* =========================================================
+   OBSIDIAN BLACK CONTAINER FOR PASSWORD UI
+   ========================================================= */
+
+.settings-page .settings-black-box {
+  background: #050810;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 18px;
+  padding: 26px;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.7), 0 10px 30px rgba(0, 0, 0, 0.5);
+  margin-top: 16px;
+}
+
+.settings-page .settings-black-box-header {
+  margin-bottom: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding-bottom: 14px;
+}
+
+.settings-page .settings-black-box-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  color: #34d399;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  padding: 4px 10px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+
+.settings-page .settings-black-box-header h4 {
+  font-size: 17px;
+  font-weight: 750;
+  color: #ffffff;
+  margin: 0 0 4px 0;
+}
+
+.settings-page .settings-black-box-header p {
+  font-size: 13px;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.settings-page .password-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.settings-page .password-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.settings-page .password-field label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #cbd5e1;
+  letter-spacing: 0.2px;
+}
+
+.settings-page .password-input-wrapper {
+  display: flex;
+  align-items: center;
+  background: #0a0e18;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.settings-page .password-input-wrapper:focus-within {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+  background: #0d1322;
+}
+
+.settings-page .password-input-icon {
+  padding: 0 14px;
+  font-size: 15px;
+  color: #818cf8;
+  display: flex;
+  align-items: center;
+}
+
+.settings-page .password-input-wrapper input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  padding: 13px 0;
+  color: #ffffff;
+  font-size: 14px;
+  outline: none;
+}
+
+.settings-page .password-toggle-btn {
+  background: transparent;
+  border: none;
+  color: #818cf8;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.8px;
+  padding: 0 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.settings-page .password-toggle-btn:hover {
+  color: #a855f7;
+}
+
+.settings-page .password-field small {
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+.settings-page .password-button {
+  align-self: flex-start;
+  padding: 13px 28px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+  border: none;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 6px;
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.25);
+}
+
+.settings-page .password-button:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(99, 102, 241, 0.35);
+}
+
+.settings-page .password-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* BLOCKED PREVIEW */
+
+.settings-page .settings-blocked-preview {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 16px;
+  padding-top: 8px;
+}
+
+.settings-page .settings-blocked-icon {
+  font-size: 22px;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.settings-page .settings-blocked-preview strong {
+  font-size: 15px;
+  font-weight: 650;
+  color: #f8fafc;
+  display: block;
+}
+
+.settings-page .settings-blocked-preview p {
+  font-size: 13px;
+  color: #94a3b8;
+  margin: 4px 0 0 0;
+  line-height: 1.4;
+}
+
+/* SAVE BAR & FOOTER ACTION BAR */
+
+.settings-page .settings-save-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 22px 30px;
+  border-radius: 20px;
+  background: rgba(30, 41, 59, 0.85);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  margin-top: 32px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.settings-page .settings-save-bar strong {
+  display: block;
+  font-size: 15px;
+  font-weight: 700;
+  color: #f8fafc;
+  margin-bottom: 4px;
+}
+
+.settings-page .settings-save-bar span {
+  display: block;
+  font-size: 13px;
+  color: #94a3b8;
+}
+
+.settings-page .settings-save-bar button {
+  padding: 13px 32px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+  border: none;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.3);
+}
+
+.settings-page .settings-save-bar button:hover {
+  opacity: 0.95;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+}
+
+/* LOADING & SPINNER */
+
+.settings-page .settings-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  text-align: center;
+}
+
+.settings-page .settings-spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(99, 102, 241, 0.2);
+  border-top-color: #6366f1;
+  border-radius: 50%;
+  animation: settings-spin 0.8s linear infinite;
+  margin-bottom: 20px;
+}
+
+@keyframes settings-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* =========================================================
+   PREVIOUS MOBILE OVERRIDES (PRESERVED)
    ========================================================= */
 
 @media (max-width: 767px) {
-
   .settings-page {
     width: 100% !important;
     min-height: 100dvh !important;
@@ -12,24 +874,24 @@
     overflow-x: hidden !important;
   }
 
-  .settings-header {
+  .settings-page .settings-header {
     width: 100% !important;
     padding: 10px 4px !important;
   }
 
-  .settings-brand {
+  .settings-page .settings-brand {
     min-width: 0 !important;
   }
 
-  .settings-brand h1 {
+  .settings-page .settings-brand h1 {
     font-size: 24px !important;
   }
 
-  .settings-brand p {
+  .settings-page .settings-brand p {
     font-size: 12px !important;
   }
 
-  .settings-header-actions {
+  .settings-page .settings-header-actions {
     width: 100% !important;
     display: grid !important;
     grid-template-columns: repeat(3, 1fr) !important;
@@ -37,7 +899,7 @@
     margin-top: 12px !important;
   }
 
-  .settings-header-actions button {
+  .settings-page .settings-header-actions button {
     min-width: 0 !important;
     height: 42px !important;
     padding: 8px !important;
@@ -45,18 +907,42 @@
     border-radius: 11px !important;
   }
 
-  .settings-content {
+  .settings-page .settings-layout {
+    grid-template-columns: 1fr !important;
+  }
+
+  .settings-page .settings-sidebar {
+    position: static !important;
+    flex-direction: row !important;
+    overflow-x: auto !important;
+    padding-bottom: 8px !important;
+  }
+
+  .settings-page .settings-content {
     width: 100% !important;
   }
 
-  .settings-section {
+  .settings-page .settings-section,
+  .settings-page .settings-card {
     width: 100% !important;
     padding: 16px !important;
     border-radius: 18px !important;
     margin-bottom: 12px !important;
   }
 
-  .settings-row {
+  .settings-page .settings-save-bar {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 14px !important;
+    text-align: center !important;
+    padding: 18px !important;
+  }
+
+  .settings-page .settings-save-bar button {
+    width: 100% !important;
+  }
+
+  .settings-page .settings-row {
     width: 100% !important;
     display: grid !important;
     grid-template-columns: minmax(0, 1fr) auto !important;
@@ -64,45 +950,49 @@
     align-items: center !important;
   }
 
-  .settings-row h3 {
+  .settings-page .settings-language-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .settings-page .settings-row h3 {
     font-size: 14px !important;
   }
 
-  .settings-row p {
+  .settings-page .settings-row p {
     font-size: 11px !important;
     line-height: 1.45 !important;
   }
 
-  .settings-control {
+  .settings-page .settings-control {
     flex: 0 0 auto !important;
   }
 
-  .settings-select,
-  .settings-input {
+  .settings-page .settings-select,
+  .settings-page .settings-input {
     width: 100% !important;
     min-width: 0 !important;
   }
 
-  .settings-danger-zone {
+  .settings-page .settings-danger-zone {
     margin-bottom: 20px !important;
   }
 }
 
 @media (max-width: 390px) {
-
   .settings-page {
     padding: 8px !important;
   }
 
-  .settings-section {
+  .settings-page .settings-section,
+  .settings-page .settings-card {
     padding: 13px !important;
   }
 
-  .settings-header-actions button {
+  .settings-page .settings-header-actions button {
     font-size: 10px !important;
   }
 
-  .settings-row {
+  .settings-page .settings-row {
     gap: 8px !important;
   }
 }

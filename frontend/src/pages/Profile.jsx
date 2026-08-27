@@ -19,7 +19,9 @@ import "./Profile.css";
 
 
 const API_BASE =
-  "https://nearconnect-backend-cavd.onrender.com";
+  window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+    ? "http://127.0.0.1:5001"
+    : "https://nearconnect-backend-cavd.onrender.com";
 
 
 export default function Profile() {
@@ -123,6 +125,7 @@ export default function Profile() {
 
     loadProfile();
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
 

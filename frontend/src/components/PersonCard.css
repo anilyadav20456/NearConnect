@@ -169,7 +169,7 @@
 
 
 /* =========================================
-   CONNECT
+   CONNECT & DIRECT MESSAGE BUTTONS
 ========================================= */
 
 .person-connect {
@@ -234,6 +234,131 @@
   background: #f5f8e9;
 
   color: #61751f;
+}
+
+/* DIRECT MESSAGE */
+
+.person-connect-message {
+  background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+
+  border-color: transparent;
+
+  color: #ffffff;
+
+  font-weight: 700;
+
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
+}
+
+.person-connect-message:hover:not(:disabled) {
+  background: linear-gradient(135deg, #4f46e5 0%, #9333ea 100%);
+
+  color: #ffffff;
+
+  transform: translateY(-1px);
+}
+
+
+/* =========================================
+   INTRO MESSAGE FORM
+========================================= */
+
+.person-intro-form {
+  margin-top: 12px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 8px;
+}
+
+.person-intro-input {
+  width: 100%;
+
+  padding: 8px 12px;
+
+  border-radius: 8px;
+
+  border: 1px solid var(--border);
+
+  font-size: 11px;
+
+  outline: none;
+
+  background: #f8fafc;
+
+  transition: all 0.2s ease;
+}
+
+.person-intro-input:focus {
+  border-color: #6366f1;
+
+  background: #ffffff;
+
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.15);
+}
+
+.person-intro-actions {
+  display: flex;
+
+  align-items: center;
+
+  gap: 6px;
+}
+
+.person-intro-send {
+  flex: 1;
+
+  height: 32px;
+
+  border-radius: 6px;
+
+  background: #0f172a;
+
+  border: 1px solid #0f172a;
+
+  color: #ffffff;
+
+  font-size: 10px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.person-intro-send:hover:not(:disabled) {
+  background: #6366f1;
+
+  border-color: #6366f1;
+}
+
+.person-intro-cancel {
+  height: 32px;
+
+  padding: 0 10px;
+
+  border-radius: 6px;
+
+  background: transparent;
+
+  border: 1px solid #cbd5e1;
+
+  color: #64748b;
+
+  font-size: 10px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.person-intro-cancel:hover {
+  background: #f1f5f9;
+
+  color: #0f172a;
 }
 
 

@@ -1,6 +1,9 @@
 import { useState } from "react";
 
-const API = "https://nearconnect-backend-cavd.onrender.com";
+const API =
+  window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+    ? "http://127.0.0.1:5001"
+    : "https://nearconnect-backend-cavd.onrender.com";
 
 export default function LogoutButton() {
   const [loading, setLoading] = useState(false);

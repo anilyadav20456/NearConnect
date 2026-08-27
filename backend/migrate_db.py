@@ -87,6 +87,18 @@ else:
             "ALTER TABLE users "
             "ADD COLUMN default_radius INTEGER "
             "DEFAULT 2"
+        ),
+
+        (
+            "reset_otp",
+            "ALTER TABLE users "
+            "ADD COLUMN reset_otp VARCHAR(6)"
+        ),
+
+        (
+            "reset_otp_expires",
+            "ALTER TABLE users "
+            "ADD COLUMN reset_otp_expires DATETIME"
         )
 
     ]

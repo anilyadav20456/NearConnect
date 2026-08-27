@@ -1,5 +1,7 @@
-import "./App.css";
-const API = "https://nearconnect-backend-cavd.onrender.com";
+export const API =
+  window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+    ? "http://127.0.0.1:5001"
+    : (process.env.REACT_APP_API_URL || "https://nearconnect-backend-cavd.onrender.com");
 
 
 // =========================================================
@@ -167,48 +169,23 @@ export async function apiFetch(
   // =======================================================
 
   let data = {};
+  const contentType = response.headers.get("content-type") || "";
 
-  const contentType =
-    response.headers.get(
-      "content-type"
-    );
-
-
-  if (
-    contentType &&
-    contentType.includes(
-      "application/json"
-    )
-  ) {
-
+  if (contentType.includes("application/json")) {
     try {
-
-      data =
-        await response.json();
-
+      data = await response.json();
     } catch {
-
       data = {};
-
     }
-
   } else {
-
     try {
-
-      const text =
-        await response.text();
-
-      data = text
+      const text = await response.text();
+      data = text && !text.includes("<!doctype") && !text.includes("<html")
         ? { message: text }
-        : {};
-
+        : { message: `Request failed with status ${response.status}` };
     } catch {
-
       data = {};
-
     }
-
   }
 
 
@@ -238,14 +215,13 @@ export async function apiFetch(
   // =======================================================
 
   if (!response.ok) {
-
+    const errMsg = data.error || data.message || data.msg;
+    if (typeof errMsg === "string" && (errMsg.includes("<!doctype") || errMsg.includes("<html"))) {
+      throw new Error(`Server endpoint returned ${response.status} error.`);
+    }
     throw new Error(
-      data.error ||
-      data.message ||
-      data.msg ||
-      "Something went wrong."
+      errMsg || "Something went wrong."
     );
-
   }
 
 
