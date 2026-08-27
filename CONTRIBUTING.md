@@ -48,4 +48,4 @@ By contributing to this project, you agree that your contributions will be licen
 We appreciate your time and effort in contributing to [Repository Name]! Your contributions help improve the project and are greatly valued.
 
 ---
-This CONTRIBUTING.md file provides guidelines and instructions for contributing to a GitHub repository. It covers the steps to get started, guidelines and best practices, code of conduct, issue tracking, communication channels, and licensing information. Contributors are encouraged to follow these guidelines to ensure a smooth collaboration and maintain the project's quality and integrity.
+This CONTRIBUTING.md file provides guidelines and instructions for contributing to a GitHub repository. It covers the steps to get started, guidelines and best practices, code of conduct, issue tracking, communication channels, and licensing information. Contributors are encouraged to follow these guidelines to ensure a smooth collaboration and maintain the project's quality and integrity
