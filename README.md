@@ -1,32 +1,65 @@
-# Chat App with Socket Programming (Python & React)
+# 🌐 NearConnect
 
-## Flask & React
+**NearConnect** is a real-time, location-based social networking and chat platform built with **Flask (Python)** and **React**. It enables users to discover nearby people within custom distance radii, exchange real-time messages via Socket.IO, manage friend requests, and customize profile preferences.
 
-This repository contains a Chat App built using Flask and React, leveraging socket programming for real-time communication. It provides a simple and interactive interface for users to engage in real-time conversations.
+---
 
-![alt text](/files/image.jpeg)
+## ✨ Core Features
 
-## How to run (Windows)
+* 📍 **Geo-Location Discovery**: Locate nearby users within configurable radii (2km, 4km, 5km).
+* 💬 **Real-Time Messaging**: Socket.IO powered instant messaging with read receipts, image attachments, and active status tracking.
+* 👥 **Connections & Requests**: Manage friend requests, accept/reject, or block/report users.
+* 🔔 **Notifications**: Real-time Socket.IO and persistent database notifications.
+* 📧 **Brevo Email Integration**: Automatic verification codes, welcome emails, and notifications.
+* 🔐 **JWT Authentication**: Secure user registration, password hashing, and token-based sessions.
 
-Open three terminals (one for the Backend and two for the Frontend instances):
+---
 
-- Backend Terminal
-    - `cd backend`
-    - `python -m venv env`
-    - `env\Scripts\activate`
-    - `pip install -r requirements.txt`
-    - `python app.py`
+## 🛠️ Technology Stack
 
-- Frontend Terminal 1
-    - `cd frontend`
-    - `npm start localhost:3000`
+* **Backend**: Flask 3, Flask-SocketIO, Flask-SQLAlchemy, PyJWT, Gunicorn, Eventlet, SQLite / PostgreSQL
+* **Frontend**: React 18, React Router v7, Socket.IO Client, Bootstrap Icons, CSS3
+* **Deployment**: Render (Backend Web Service) & Vercel (Frontend SPA)
 
-- Frontend Terminal 2
-    - `cd frontend`
-    - `npm start localhost:3001`
+---
 
+## 🚀 Local Development Setup
 
-## Result
+### 1. Backend Setup
+```bash
+cd backend
+python -m venv venv
+# On Windows PowerShell:
+.\venv\Scripts\activate
+pip install -r requirements.txt
+python app.py
+```
+*Backend runs on `http://127.0.0.1:5001`*
 
-![alt text](/files/Capture.PNG)
+### 2. Frontend Setup
+```bash
+cd frontend
+npm install
+npm start
+```
+*Frontend runs on `http://localhost:3000`*
 
+---
+
+## ☁️ Production Deployment
+
+### Backend (Render)
+* **Root Directory**: `backend`
+* **Build Command**: `pip install -r requirements.txt`
+* **Start Command**: `gunicorn -k eventlet -w 1 app:app`
+
+### Frontend (Vercel)
+* **Root Directory**: `frontend`
+* **Build Command**: `npm run build`
+* **Output Directory**: `build`
+* **Environment Variable**: `REACT_APP_API_URL=https://your-render-backend.onrender.com`
+
+---
+
+## 📄 License
+Licensed under the [MIT License](LICENSE).
