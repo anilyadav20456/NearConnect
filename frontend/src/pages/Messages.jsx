@@ -1775,7 +1775,7 @@ export default function Messages() {
         <div className="chat-media-box">
           <img
             src={fullUrl}
-            alt="Shared image"
+            alt="Shared content"
             className="chat-media-image"
             onClick={() => window.open(fullUrl, "_blank")}
           />
