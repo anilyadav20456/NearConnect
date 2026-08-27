@@ -25,7 +25,7 @@ import "./Notifications.css";
 const SOCKET_URL =
   window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
     ? "http://127.0.0.1:5001"
-    : (process.env.REACT_APP_SOCKET_URL || process.env.REACT_APP_API_URL || "https://nearconnect-backend-cavd.onrender.com");
+    : (process.env.REACT_APP_SOCKET_URL || process.env.REACT_APP_API_URL || "https://nearconnect-ohe3.onrender.com");
 
 
 function formatNotificationTime(
