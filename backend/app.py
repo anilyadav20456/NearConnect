@@ -793,6 +793,9 @@ def send_registration_otp():
             "expires_at": expires_at
         }
 
+        # Log OTP to server logs for easy debugging
+        print(f"=== REGISTRATION OTP FOR {email}: {otp} ===")
+
         # Send email OTP via Brevo NearConnect
         send_registration_otp_email(email, name, otp)
 
